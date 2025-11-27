@@ -15,9 +15,12 @@ export function useAllForecasts(city: string, lat: number, lon: number) {
 
   const isError = openMeteo.isError || metNo.isError || weather.isError || visual.isError;
 
+  const hasAnyData = !!openMeteo.data || !!metNo.data || !!weather.data || !!visual.data;
+
   return {
     isLoading,
     isError,
+    hasAnyData,
     data: {
       openMeteo: openMeteo.data,
       metNo: metNo.data,
