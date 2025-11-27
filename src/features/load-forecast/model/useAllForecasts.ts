@@ -1,0 +1,28 @@
+import {
+  useGetOpenMeteoQuery,
+  useGetMetNoQuery,
+  useGetWeatherApiQuery,
+  useGetVisualCrossingQuery,
+} from '@/entities/forecast/api/forecastApi';
+
+export function useAllForecasts(city: string, lat: number, lon: number) {
+  const openMeteo = useGetOpenMeteoQuery({ lat, lon });
+  const metNo = useGetMetNoQuery({ lat, lon });
+  const weather = useGetWeatherApiQuery({ city });
+  const visual = useGetVisualCrossingQuery({ city });
+
+  const isLoading = openMeteo.isLoading || metNo.isLoading || weather.isLoading || visual.isLoading;
+
+  const isError = openMeteo.isError || metNo.isError || weather.isError || visual.isError;
+
+  return {
+    isLoading,
+    isError,
+    data: {
+      openMeteo: openMeteo.data,
+      metNo: metNo.data,
+      weatherApi: weather.data,
+      visualCrossing: visual.data,
+    },
+  };
+}
