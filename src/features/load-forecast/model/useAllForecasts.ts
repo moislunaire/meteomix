@@ -1,3 +1,4 @@
+import type { ForecastBySource } from '@/entities/forecast';
 import {
   useGetOpenMeteoQuery,
   useGetMetNoQuery,
@@ -26,6 +27,6 @@ export function useAllForecasts(city: string, lat: number, lon: number) {
       metNo: metNo.data,
       weatherApi: weather.data,
       visualCrossing: visual.data,
-    },
+    } satisfies ForecastBySource,
   };
 }

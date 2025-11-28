@@ -1,16 +1,21 @@
+import { useAllForecasts } from '@/features/load-forecast/model/useAllForecasts';
+import { SearchCity } from '@/features/search-city';
+import { ForecastTable } from '@/widgets/forecast-table';
 import { Container, Space, Title } from '@mantine/core';
 
-import type { WeatherForecastRow } from '../../../widgets/weather-table';
-import { WeatherTable } from '../../../widgets/weather-table';
-import { SearchCity } from '@/features/search-city';
-
-const MOCK_DATA: WeatherForecastRow[] = [
-  { source: 'OpenWeatherMap', today: '+3°C ☁️', tomorrow: '+1°C ❄️', dayAfterTomorrow: '+2°C 🌥' },
-  { source: 'AccuWeather', today: '+4°C 🌥', tomorrow: '+0°C ❄️', dayAfterTomorrow: '+3°C 🌧' },
-  { source: 'WeatherAPI', today: '+2°C 🌧', tomorrow: '+1°C 🌥', dayAfterTomorrow: '+1°C 🌧' },
-];
-
 export function HomePage() {
+  // временно: город захардкожен
+  const city = 'Moscow';
+  const lat = 55.7558;
+  const lon = 37.6176;
+
+  const { data, isLoading, isError, hasAnyData } = useAllForecasts(city, lat, lon);
+
+  // пока без красивого статус-компонента:
+  if (isLoading) return <div>Loading…</div>;
+  if (isError) return <div>Failed to load data</div>;
+  if (!hasAnyData) return <div>No data</div>;
+
   return (
     <Container size="md" py="xl">
       <SearchCity />
@@ -23,7 +28,7 @@ export function HomePage() {
 
       <Space h="lg" />
 
-      <WeatherTable data={MOCK_DATA} />
+      <ForecastTable forecasts={data} />
     </Container>
   );
 }
