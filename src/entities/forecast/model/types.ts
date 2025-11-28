@@ -20,9 +20,11 @@ export interface NormalizedForecastDay {
 
 export type NormalizedForecast = NormalizedForecastDay[];
 
-export interface ForecastBySource {
-  openMeteo?: NormalizedForecast;
-  metNo?: NormalizedForecast;
-  weatherApi?: NormalizedForecast;
-  visualCrossing?: NormalizedForecast;
-}
+// общий тип для идентификаторов источников
+export type ForecastSourceId = 'openMeteo' | 'metNo' | 'weatherApi' | 'visualCrossing';
+
+// данные по источникам
+export type ForecastBySource = Partial<Record<ForecastSourceId, NormalizedForecast | undefined>>;
+
+// ошибки по источникам
+export type ForecastErrorsBySource = Record<ForecastSourceId, boolean>;

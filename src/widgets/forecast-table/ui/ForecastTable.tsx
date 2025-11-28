@@ -1,27 +1,31 @@
-import { Paper, Table } from '@mantine/core';
-import type { ForecastBySource } from '@/entities/forecast/model/types';
+import { Paper, Table, Text, Group, Tooltip } from '@mantine/core';
+import { IconAlertTriangle } from '@tabler/icons-react';
+import { SkeletonCell } from './SkeletonCell';
+import classes from './ForecastTable.module.css';
+import type {
+  ForecastBySource,
+  ForecastErrorsBySource,
+  ForecastSourceId,
+} from '@/entities/forecast/model/types';
 
-interface ForecastTableProps {
-  forecasts: ForecastBySource;
-}
-
-const SOURCES: { key: keyof ForecastBySource; label: string }[] = [
+const SOURCES: { key: ForecastSourceId; label: string }[] = [
   { key: 'openMeteo', label: 'Open-Meteo' },
   { key: 'metNo', label: 'MET Norway' },
   { key: 'weatherApi', label: 'WeatherAPI' },
   { key: 'visualCrossing', label: 'Visual Crossing' },
 ];
 
-const formatTemp = (temp?: number) => {
-  if (temp === undefined || Number.isNaN(temp)) return '—';
-  const sign = temp > 0 ? '+' : temp < 0 ? '' : '';
-  return `${sign}${Math.round(temp)}°C`;
-};
+interface Props {
+  forecasts: ForecastBySource;
+  errors: ForecastErrorsBySource;
+  isLoading: boolean;
+  hasAnyData: boolean;
+}
 
-export function ForecastTable({ forecasts }: ForecastTableProps) {
+export function ForecastTable({ forecasts, errors, isLoading, hasAnyData }: Props) {
   return (
     <Paper shadow="sm" p="md" radius="md" withBorder>
-      <Table highlightOnHover withTableBorder withColumnBorders>
+      <Table highlightOnHover={hasAnyData} withTableBorder withColumnBorders>
         <Table.Thead>
           <Table.Tr>
             <Table.Th>Источник</Table.Th>
@@ -31,28 +35,69 @@ export function ForecastTable({ forecasts }: ForecastTableProps) {
           </Table.Tr>
         </Table.Thead>
 
-        <Table.Tbody>
-          {SOURCES.map(({ key, label }) => {
-            const days = forecasts[key];
+        {/* 🟡 EMPTY STATE внутри таблицы */}
+        {!hasAnyData && !isLoading ? (
+          <Table.Tbody>
+            <Table.Tr>
+              <Table.Td colSpan={4}>
+                <Group justify="center">
+                  <IconAlertTriangle size={18} color="gold" />
+                  <Text ta="center" c="dimmed" size="sm">
+                    Не удалось получить прогноз погоды ни от одного сервиса.
+                  </Text>
+                </Group>
+              </Table.Td>
+            </Table.Tr>
+          </Table.Tbody>
+        ) : (
+          <Table.Tbody>
+            {SOURCES.map(({ key, label }) => {
+              const days = forecasts[key];
+              const isError = errors[key];
 
-            if (!days || days.length === 0) {
-              return null; // нет данных — не рисуем строку
-            }
+              return (
+                <Table.Tr key={key} className={isError ? classes.rowError : undefined}>
+                  {/* источник */}
+                  <Table.Td>
+                    {label}{' '}
+                    {isError ? (
+                      <Tooltip
+                        label={`Не удалось получить данные от сервиса ${label}`}
+                        withArrow
+                        color="red"
+                      >
+                        <span className={classes.errorIcon}>⚠️</span>
+                      </Tooltip>
+                    ) : null}
+                  </Table.Td>
 
-            const d0 = days[0];
-            const d1 = days[1];
-            const d2 = days[2];
+                  {/* 3 дня */}
+                  {[0, 1, 2].map((idx) => {
+                    const day = days?.[idx];
 
-            return (
-              <Table.Tr key={key}>
-                <Table.Td>{label}</Table.Td>
-                <Table.Td>{d0 ? `${formatTemp(d0.temp)} ${d0.icon}` : '—'}</Table.Td>
-                <Table.Td>{d1 ? `${formatTemp(d1.temp)} ${d1.icon}` : '—'}</Table.Td>
-                <Table.Td>{d2 ? `${formatTemp(d2.temp)} ${d2.icon}` : '—'}</Table.Td>
-              </Table.Tr>
-            );
-          })}
-        </Table.Tbody>
+                    if (isLoading && !day) {
+                      return (
+                        <Table.Td key={idx}>
+                          <SkeletonCell />
+                        </Table.Td>
+                      );
+                    }
+
+                    if (isError || !day) {
+                      return <Table.Td key={idx}>—</Table.Td>;
+                    }
+
+                    return (
+                      <Table.Td key={idx}>
+                        {day.temp}°C {day.icon}
+                      </Table.Td>
+                    );
+                  })}
+                </Table.Tr>
+              );
+            })}
+          </Table.Tbody>
+        )}
       </Table>
     </Paper>
   );

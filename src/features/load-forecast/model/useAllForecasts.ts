@@ -1,10 +1,10 @@
-import type { ForecastBySource } from '@/entities/forecast';
 import {
-  useGetOpenMeteoQuery,
   useGetMetNoQuery,
+  useGetOpenMeteoQuery,
   useGetWeatherApiQuery,
   useGetVisualCrossingQuery,
 } from '@/entities/forecast/api/forecastApi';
+import type { ForecastBySource, ForecastErrorsBySource } from '@/entities/forecast/model/types';
 
 export function useAllForecasts(city: string, lat: number, lon: number) {
   const openMeteo = useGetOpenMeteoQuery({ lat, lon });
@@ -16,17 +16,27 @@ export function useAllForecasts(city: string, lat: number, lon: number) {
 
   const isError = openMeteo.isError || metNo.isError || weather.isError || visual.isError;
 
-  const hasAnyData = !!openMeteo.data || !!metNo.data || !!weather.data || !!visual.data;
+  const data: ForecastBySource = {
+    openMeteo: openMeteo.data,
+    metNo: metNo.data,
+    weatherApi: weather.data,
+    visualCrossing: visual.data,
+  };
+
+  const errors: ForecastErrorsBySource = {
+    openMeteo: !!openMeteo.isError,
+    metNo: !!metNo.isError,
+    weatherApi: !!weather.isError,
+    visualCrossing: !!visual.isError,
+  };
+
+  const hasAnyData = !!data.openMeteo || !!data.metNo || !!data.weatherApi || !!data.visualCrossing;
 
   return {
     isLoading,
     isError,
     hasAnyData,
-    data: {
-      openMeteo: openMeteo.data,
-      metNo: metNo.data,
-      weatherApi: weather.data,
-      visualCrossing: visual.data,
-    } satisfies ForecastBySource,
+    data,
+    errors,
   };
 }

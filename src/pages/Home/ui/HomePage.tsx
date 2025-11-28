@@ -9,12 +9,7 @@ export function HomePage() {
   const lat = 55.7558;
   const lon = 37.6176;
 
-  const { data, isLoading, isError, hasAnyData } = useAllForecasts(city, lat, lon);
-
-  // пока без красивого статус-компонента:
-  if (isLoading) return <div>Loading…</div>;
-  if (isError) return <div>Failed to load data</div>;
-  if (!hasAnyData) return <div>No data</div>;
+  const { data, errors, isLoading, hasAnyData } = useAllForecasts(city, lat, lon);
 
   return (
     <Container size="md" py="xl">
@@ -28,7 +23,12 @@ export function HomePage() {
 
       <Space h="lg" />
 
-      <ForecastTable forecasts={data} />
+      <ForecastTable
+        forecasts={data}
+        errors={errors}
+        isLoading={isLoading}
+        hasAnyData={hasAnyData}
+      />
     </Container>
   );
 }

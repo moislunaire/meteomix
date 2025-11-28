@@ -1,0 +1,9 @@
+.rowError {
+  opacity: 0.4;
+}
+
+.errorIcon {
+  cursor: help;
+  display: inline-block;
+}
+
