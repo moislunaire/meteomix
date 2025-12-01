@@ -15,7 +15,7 @@
     "lint:fix": "npm-run-all --parallel --print-label lint:eslint:fix lint:fsd:fix",
     "preview": "vite preview",
     "analyze": "fsd-crawler",
-    "prepare": "husky"
+    "prepare": "node .husky/install.mjs"
   },
   "dependencies": {
     "@mantine/core": "^8.3.9",
