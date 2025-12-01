@@ -14,6 +14,5 @@ export async function fetchSuggest(query: string) {
   }
 
   const data = await response.json();
-  console.log('🚀 ~ fetchSuggest ~ data:', data);
   return data.results ?? [];
 }

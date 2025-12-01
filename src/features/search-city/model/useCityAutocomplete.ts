@@ -61,8 +61,9 @@ export function useCityAutocomplete(onSelect: (city: CityResult) => void, initia
 
         setRawItems(data);
         setSuggestions(data.map(formatSuggestLabel));
-      } catch (e) {
-        console.error('Suggest error:', e);
+      } catch {
+        setRawItems([]);
+        setSuggestions(defaultOption);
       } finally {
         setLoading(false);
       }
@@ -72,7 +73,7 @@ export function useCityAutocomplete(onSelect: (city: CityResult) => void, initia
     return () => {
       cancelled = true;
     };
-  }, [debounced]);
+  }, [debounced, defaultOption]);
 
   // Выбор города
   const selectCity = useCallback(
