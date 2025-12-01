@@ -4,23 +4,17 @@ import { useAllForecasts } from '@/features/load-forecast';
 import { CitySelect, useCityState, type CityResult } from '@/features/search-city';
 
 import { ForecastTable } from '@/widgets/forecast-table';
-import { useEffect } from 'react';
-import { DEFAULT_CITY } from '@/entities/location';
 
 export function HomePage() {
   const { city, setCity } = useCityState();
 
   const { data, errors, isLoading, hasAnyData } = useAllForecasts(city.lat, city.lon);
 
-  // Устанавливаем город по умолчанию
-  useEffect(() => {
-    setCity(DEFAULT_CITY);
-  }, [setCity]);
-
   return (
     <Container size="md" py="xl">
       {/* Поиск города */}
       <CitySelect
+        selectedCity={city.label}
         onSelect={(selectedCity: CityResult) => {
           setCity({
             label: selectedCity.fullName,

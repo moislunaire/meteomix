@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDebouncedValue } from '@mantine/hooks';
 
 import { fetchSuggest } from '../api/suggestApi';
@@ -6,14 +6,43 @@ import { fetchCoordinates } from '../api/geocoderApi';
 import { formatSuggestLabel } from './mappers';
 import type { CityResult, SuggestItem, SuggestOption } from './types';
 
-export function useCityAutocomplete(onSelect: (city: CityResult) => void) {
-  const [input, setInput] = useState('');
-  const [value, setValue] = useState<string | null>(null);
+export function useCityAutocomplete(onSelect: (city: CityResult) => void, initialLabel = '') {
+  const defaultOption = useMemo(() => {
+    if (!initialLabel) return [] as SuggestOption[];
+    return [
+      {
+        value: initialLabel,
+        label: initialLabel,
+      },
+    ];
+  }, [initialLabel]);
+
+  const [input, setInput] = useState(initialLabel);
+  const [value, setValue] = useState<string | null>(initialLabel || null);
   const [debounced] = useDebouncedValue(input, 350);
 
-  const [suggestions, setSuggestions] = useState<SuggestOption[]>([]);
+  const [suggestions, setSuggestions] = useState<SuggestOption[]>(defaultOption);
   const [rawItems, setRawItems] = useState<SuggestItem[]>([]);
   const [loading, setLoading] = useState(false);
+
+  // Позволяет обновить выбранный город, если он задан извне (например, дефолтный город)
+  useEffect(() => {
+    if (!initialLabel) return;
+
+    setInput(initialLabel);
+    setValue(initialLabel);
+    setSuggestions((prev) => {
+      const hasInitial = prev.some((option) => option.value === initialLabel);
+      if (hasInitial) return prev;
+      return [
+        {
+          value: initialLabel,
+          label: initialLabel,
+        },
+        ...prev,
+      ];
+    });
+  }, [initialLabel]);
 
   useEffect(() => {
     if (debounced.length < 2) {

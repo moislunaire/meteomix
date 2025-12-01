@@ -4,11 +4,13 @@ import type { CityResult } from '../model/types';
 
 interface Props {
   onSelect: (city: CityResult) => void;
+  /** Название текущего выбранного города */
+  selectedCity?: string;
 }
 
-export function CitySelect({ onSelect }: Props) {
+export function CitySelect({ onSelect, selectedCity }: Props) {
   const { input, setInput, suggestions, loading, selectCity, value, setValue } =
-    useCityAutocomplete(onSelect);
+    useCityAutocomplete(onSelect, selectedCity);
 
   return (
     <Select
