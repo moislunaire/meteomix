@@ -7,19 +7,24 @@ interface Props {
 }
 
 export function CitySelect({ onSelect }: Props) {
-  const { input, setInput, suggestions, loading, selectCity } = useCityAutocomplete(onSelect);
+  const { input, setInput, suggestions, loading, selectCity, value, setValue } =
+    useCityAutocomplete(onSelect);
 
   return (
     <Select
       searchable
+      value={value}
       searchValue={input}
       onSearchChange={setInput}
-      data={suggestions.map((label) => ({ value: label, label }))}
+      data={suggestions}
       placeholder="Введите город"
       nothingFoundMessage="Нет вариантов"
       rightSection={loading ? '…' : null}
       maxDropdownHeight={300}
-      onChange={(value) => value && selectCity(value)}
+      onChange={(nextValue) => {
+        setValue(nextValue);
+        if (nextValue) selectCity(nextValue);
+      }}
     />
   );
 }

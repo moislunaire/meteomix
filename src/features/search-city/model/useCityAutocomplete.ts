@@ -4,14 +4,14 @@ import { useDebouncedValue } from '@mantine/hooks';
 import { fetchSuggest } from '../api/suggestApi';
 import { fetchCoordinates } from '../api/geocoderApi';
 import { formatSuggestLabel } from './mappers';
-import type { CityResult, SuggestItem } from './types';
+import type { CityResult, SuggestItem, SuggestOption } from './types';
 
 export function useCityAutocomplete(onSelect: (city: CityResult) => void) {
   const [input, setInput] = useState('');
   const [value, setValue] = useState<string | null>(null);
   const [debounced] = useDebouncedValue(input, 350);
 
-  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [suggestions, setSuggestions] = useState<SuggestOption[]>([]);
   const [rawItems, setRawItems] = useState<SuggestItem[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -47,12 +47,15 @@ export function useCityAutocomplete(onSelect: (city: CityResult) => void) {
 
   // Выбор города
   const selectCity = useCallback(
-    async (label: string) => {
-      console.log('🚀 ~ useCityAutocomplete ~ label:', label);
-      setValue(label);
+    async (value: string) => {
+      setValue(value);
+
+      const option = suggestions.find((suggestion) => suggestion.value === value);
+      const item = rawItems.find((i) => formatSuggestLabel(i).value === value);
+
+      const label = option?.label ?? value;
       setInput(label);
 
-      const item = rawItems.find((i) => formatSuggestLabel(i) === label);
       const name = item?.title.text ?? label;
 
       const coords = await fetchCoordinates(name);
@@ -64,7 +67,7 @@ export function useCityAutocomplete(onSelect: (city: CityResult) => void) {
         lon: coords.lon,
       });
     },
-    [rawItems, onSelect]
+    [rawItems, suggestions, onSelect]
   );
 
   return {

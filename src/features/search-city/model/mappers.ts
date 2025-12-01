@@ -1,8 +1,14 @@
-import type { SuggestItem } from './types';
+import type { SuggestItem, SuggestOption } from './types';
 
-export const formatSuggestLabel = (item: SuggestItem) => {
+export const formatSuggestLabel = (item: SuggestItem): SuggestOption => {
   const title = item.title.text;
-  const sub = item.subtitle?.text ?? '';
+  const subtitle = item.subtitle?.text;
   const distance = item.distance.text;
-  return sub ? `${title}, ${sub}, ${distance}` : `${title} ${distance}`;
+
+  const label = subtitle ? `${title}, ${subtitle}` : title;
+
+  return {
+    label,
+    value: `${label} — ${distance}`,
+  };
 };

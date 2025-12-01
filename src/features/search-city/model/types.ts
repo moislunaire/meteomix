@@ -7,6 +7,11 @@ export interface SuggestItem {
   };
 }
 
+export interface SuggestOption {
+  label: string;
+  value: string;
+}
+
 export interface CityResult {
   name: string;
   fullName: string;
