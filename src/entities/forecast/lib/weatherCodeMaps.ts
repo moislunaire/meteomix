@@ -1,21 +1,43 @@
 export function mapWeatherCode(code: number): string {
-  if (code === 0) return 'Clear';
-  if (code === 1 || code === 2) return 'Partly cloudy';
-  if (code === 3) return 'Cloudy';
-  if (code >= 51 && code <= 67) return 'Drizzle';
-  if (code >= 71 && code <= 77) return 'Snow';
-  if (code >= 80 && code <= 82) return 'Rain showers';
-  if (code >= 95) return 'Thunderstorm';
-  return 'Unknown';
+  if (code === 0) return 'Ясное небо';
+  if (code === 1) return 'В основном ясно';
+  if (code === 2) return 'Переменная облачность';
+  if (code === 3) return 'Пасмурно';
+  if (code === 45 || code === 48) return 'Туман или туман с изморозью';
+  if (code === 51) return 'Лёгкая морось';
+  if (code === 53) return 'Умеренная морось';
+  if (code === 55) return 'Сильная морось';
+  if (code === 56) return 'Лёгкая переохлаждённая морось';
+  if (code === 57) return 'Сильная переохлаждённая морось';
+  if (code === 61) return 'Небольшой дождь';
+  if (code === 63) return 'Умеренный дождь';
+  if (code === 65) return 'Сильный дождь';
+  if (code === 66) return 'Лёгкий переохлаждённый дождь';
+  if (code === 67) return 'Сильный переохлаждённый дождь';
+  if (code === 71) return 'Небольшой снег';
+  if (code === 73) return 'Умеренный снегопад';
+  if (code === 75) return 'Сильный снегопад';
+  if (code === 77) return 'Снежная крупа';
+  if (code === 80) return 'Кратковременный дождь';
+  if (code === 81) return 'Умеренный кратковременный дождь';
+  if (code === 82) return 'Ливневый дождь';
+  if (code === 85) return 'Кратковременный снег';
+  if (code === 86) return 'Сильный кратковременный снег';
+  if (code === 95) return 'Гроза';
+  if (code === 96) return 'Гроза с небольшим градом';
+  if (code === 99) return 'Гроза с сильным градом';
+  return 'Неизвестный код погоды';
 }
 
 export function mapWeatherIcon(code: number): string {
   if (code === 0) return '☀️';
   if (code === 1 || code === 2) return '⛅';
   if (code === 3) return '☁️';
-  if (code >= 51 && code <= 67) return '🌧️';
-  if (code >= 71 && code <= 77) return '❄️';
+  if (code === 45 || code === 48) return '🌫️';
+  if ((code >= 51 && code <= 57) || (code >= 61 && code <= 67)) return '🌧️';
+  if (code >= 71 && code <= 77) return '🌨️';
   if (code >= 80 && code <= 82) return '🌦️';
-  if (code >= 95) return '⛈️';
+  if (code === 85 || code === 86) return '🌨️';
+  if (code >= 95 && code <= 99) return '⛈️';
   return '❓';
 }

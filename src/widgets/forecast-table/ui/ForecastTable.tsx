@@ -89,7 +89,10 @@ export function ForecastTable({ forecasts, errors, isLoading, hasAnyData }: Prop
 
                     return (
                       <Table.Td key={idx}>
-                        {day.temp}°C {day.icon}
+                        {day.temp}°C{' '}
+                        <Tooltip label={day.condition} withArrow>
+                          <span aria-label={day.condition}>{day.icon}</span>
+                        </Tooltip>
                       </Table.Td>
                     );
                   })}
