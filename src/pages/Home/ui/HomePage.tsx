@@ -1,9 +1,10 @@
-import { Container, Space, Title } from '@mantine/core';
+import { Container, Group, Space, Title } from '@mantine/core';
 
 import { useAllForecasts } from '@/features/load-forecast';
 import { CitySelect, useCityState, type CityResult } from '@/features/search-city';
 
 import { ForecastTable } from '@/widgets/forecast-table';
+import { AppHeader } from '@/widgets/app-header';
 
 export function HomePage() {
   const { city, setCity } = useCityState();
@@ -12,6 +13,12 @@ export function HomePage() {
 
   return (
     <Container size="md" py="xl">
+      <Group justify="center">
+        <AppHeader />
+      </Group>
+
+      <Space h="xl" />
+
       {/* Поиск города */}
       <CitySelect
         selectedCity={city.label}
