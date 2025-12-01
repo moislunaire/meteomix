@@ -34,17 +34,17 @@ export const forecastApi = createApi({
 
     // 3. WeatherAPI
     getWeatherApi: build.query({
-      query: ({ city }) =>
+      query: ({ lat, lon }) =>
         `https://api.weatherapi.com/v1/forecast.json?key=${
           import.meta.env.VITE_WEATHERAPI_KEY
-        }&q=${city}&days=3`,
+        }&q=${lat},${lon}&days=3`,
       transformResponse: (resp: WeatherApiResponse) => normalizeWeatherApi(resp),
     }),
 
     // 4. VisualCrossing
     getVisualCrossing: build.query({
-      query: ({ city }) =>
-        `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${city}?key=${
+      query: ({ lat, lon }) =>
+        `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${lat},${lon}?key=${
           import.meta.env.VITE_VISUALCROSSING_API_KEY
         }&unitGroup=metric`,
       transformResponse: (resp: VisualCrossingResponse) => normalizeVisualCrossing(resp),

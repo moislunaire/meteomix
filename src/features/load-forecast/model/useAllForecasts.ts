@@ -3,14 +3,15 @@ import {
   useGetOpenMeteoQuery,
   useGetWeatherApiQuery,
   useGetVisualCrossingQuery,
-} from '@/entities/forecast/api/forecastApi';
-import type { ForecastBySource, ForecastErrorsBySource } from '@/entities/forecast/model/types';
+  type ForecastBySource,
+  type ForecastErrorsBySource,
+} from '@/entities/forecast';
 
-export function useAllForecasts(city: string, lat: number, lon: number) {
+export function useAllForecasts(lat: number, lon: number) {
   const openMeteo = useGetOpenMeteoQuery({ lat, lon });
   const metNo = useGetMetNoQuery({ lat, lon });
-  const weather = useGetWeatherApiQuery({ city });
-  const visual = useGetVisualCrossingQuery({ city });
+  const weather = useGetWeatherApiQuery({ lat, lon });
+  const visual = useGetVisualCrossingQuery({ lat, lon });
 
   const isLoading = openMeteo.isLoading || metNo.isLoading || weather.isLoading || visual.isLoading;
 

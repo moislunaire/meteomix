@@ -6,7 +6,7 @@ import type {
   ForecastBySource,
   ForecastErrorsBySource,
   ForecastSourceId,
-} from '@/entities/forecast/model/types';
+} from '@/entities/forecast';
 
 const SOURCES: { key: ForecastSourceId; label: string }[] = [
   { key: 'openMeteo', label: 'Open-Meteo' },

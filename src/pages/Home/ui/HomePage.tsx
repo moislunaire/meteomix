@@ -1,21 +1,39 @@
-import { useAllForecasts } from '@/features/load-forecast';
-import { SearchCityBar, useCityState } from '@/features/search-city';
-import { ForecastTable } from '@/widgets/forecast-table';
 import { Container, Space, Title } from '@mantine/core';
 
-export function HomePage() {
-  const { city, setCityByName } = useCityState();
+import { useAllForecasts } from '@/features/load-forecast';
+import { CitySelect, useCityState, type CityResult } from '@/features/search-city';
 
-  const { data, errors, isLoading, hasAnyData } = useAllForecasts(city.query, city.lat, city.lon);
+import { ForecastTable } from '@/widgets/forecast-table';
+import { useEffect } from 'react';
+import { DEFAULT_CITY } from '@/entities/location';
+
+export function HomePage() {
+  const { city, setCity } = useCityState();
+
+  const { data, errors, isLoading, hasAnyData } = useAllForecasts(city.lat, city.lon);
+
+  // Устанавливаем город по умолчанию
+  useEffect(() => {
+    setCity(DEFAULT_CITY);
+  }, [setCity]);
 
   return (
     <Container size="md" py="xl">
-      <SearchCityBar cityName={city.label} onSearch={setCityByName} />
+      {/* Поиск города */}
+      <CitySelect
+        onSelect={(selectedCity: CityResult) => {
+          setCity({
+            label: selectedCity.fullName,
+            lat: selectedCity.lat,
+            lon: selectedCity.lon,
+          });
+        }}
+      />
 
       <Space h="xl" />
 
       <Title order={2} ta="center">
-        Meteomix — прогноз на 3 дня
+        {city.label} — прогноз на 3 дня
       </Title>
 
       <Space h="lg" />

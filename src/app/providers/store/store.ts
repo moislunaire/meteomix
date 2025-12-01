@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { forecastApi } from '@/entities/forecast/api/forecastApi';
+import { forecastApi } from '@/entities/forecast';
 
 export const store = configureStore({
   reducer: {
