@@ -1,0 +1,17 @@
+.loader {
+  display: inline-block;
+  animation:
+    meteomix-spin 0.9s linear infinite,
+    meteomix-pulse 1.4s ease-in-out infinite;
+  transform-origin: 50% 50%;
+}
+
+@keyframes meteomix-spin {
+  0% { transform: rotate(0deg) scale(1); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+@keyframes meteomix-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
