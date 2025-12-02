@@ -1,4 +1,4 @@
-import { Select } from '@mantine/core';
+import { Loader, Select } from '@mantine/core';
 import { useCityAutocomplete } from '../model/useCityAutocomplete';
 import type { CityResult } from '../model/types';
 import { IconSearch } from '@tabler/icons-react';
@@ -15,6 +15,8 @@ export function CitySelect({ onSelect, selectedCity }: Props) {
 
   return (
     <Select
+      allowDeselect={false}
+      withCheckIcon={false}
       searchable
       clearable
       value={value}
@@ -23,7 +25,7 @@ export function CitySelect({ onSelect, selectedCity }: Props) {
       data={suggestions}
       placeholder="Введите город"
       nothingFoundMessage="Нет вариантов"
-      rightSection={loading ? '…' : null}
+      rightSection={loading ? <Loader size="xs" type="dots" /> : null}
       maxDropdownHeight={300}
       leftSection={<IconSearch size={16} stroke={1.5} />}
       onChange={(nextValue) => {
