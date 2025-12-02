@@ -1,49 +1,63 @@
 @keyframes loader-animation {
   0% {
-    transform: rotateY(0deg);
+    transform: rotate(0deg);
     animation-timing-function: cubic-bezier(0.5, 0, 1, 0.5);
   }
 
   50% {
-    transform: rotateY(1800deg);
+    transform: rotate(1800deg);
     animation-timing-function: cubic-bezier(0, 0.5, 0.5, 1);
   }
 
   100% {
-    transform: rotateY(3600deg);
+    transform: rotate(3600deg);
     animation-timing-function: cubic-bezier(0.5, 0, 1, 0.5);
   }
 }
 
-.meteomixCssLoader {
-  --stroke: 3px;        /* толщина линий */
+.meteomix-css-loader {
+  --stroke: 1px;        /* толщина линий */
+  --size: var(--loader-size); /* размер лоадера */
 
-  width: var(--loader-size);
-  height: var(--loader-size);
+  width: var(--size);
+  height: var(--size);
   position: relative;
-  animation: loader-animation 2.4s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+  animation: loader-animation 1.4s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+}
+
+:root[data-mantine-color-scheme="light"] .meteomix-css-loader {
+  --color: var(--mantine-color-gray-7); /* цвет лоадера */
+}
+
+:root[data-mantine-color-scheme="dark"] .meteomix-css-loader {
+  --color: var(--mantine-color-dark-1); /* цвет лоадера */
 }
 
 /* Круг */
-.meteomix-icon::before {
+.meteomix-css-loader::before {
   content: "";
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  border: var(--stroke) solid var(--loader-color);
+  border: var(--stroke) solid var(--color);
 }
 
 /* Диагонали */
-.meteomix-icon::after {
+.meteomix-css-loader::after {
   content: "";
   position: absolute;
   inset: 0;
 
   background:
-    linear-gradient(45deg, transparent 48%, var(--loader-color) 48%, var(--loader-color) 52%, transparent 52%),
-    linear-gradient(-45deg, transparent 48%, var(--loader-color) 48%, var(--loader-color) 52%, transparent 52%);
-
-  /* Зазор от краёв круга */
-  padding: calc(var(--loader-size) * 0.18);
+    linear-gradient(45deg, transparent 48%, var(--color) 48%, var(--color) 52%, transparent 52%),
+    linear-gradient(-45deg, transparent 48%, var(--color) 48%, var(--color) 52%, transparent 52%);
+    
   border-radius: 50%;
+  width: calc(var(--size) * 0.6);
+  height: calc(var(--size) * 0.6);
+
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
 }

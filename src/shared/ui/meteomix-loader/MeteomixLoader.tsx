@@ -7,7 +7,7 @@ export const MeteomixLoader: MantineLoaderComponent = forwardRef(
   ({ className, ...others }, ref) => (
     <Box
       component="span"
-      className={cx(classes.meteomixCssLoader, className)}
+      className={cx(classes['meteomix-css-loader'], className)}
       {...others}
       ref={ref}
     />

@@ -1,8 +1,7 @@
-import { Select } from '@mantine/core';
+import { Loader, Select } from '@mantine/core';
 import { useCityAutocomplete } from '../model/useCityAutocomplete';
 import type { CityResult } from '../model/types';
 import { IconSearch } from '@tabler/icons-react';
-import { MeteomixLoader } from '@/shared/ui/meteomix-loader';
 
 interface Props {
   onSelect: (city: CityResult) => void;
@@ -26,7 +25,7 @@ export function CitySelect({ onSelect, selectedCity }: Props) {
       data={suggestions}
       placeholder="Введите город"
       nothingFoundMessage="Нет вариантов"
-      rightSection={loading ? <MeteomixLoader /> : <MeteomixLoader />}
+      rightSection={loading ? <Loader size="xs" /> : null}
       maxDropdownHeight={300}
       leftSection={<IconSearch size={16} stroke={1.5} />}
       onChange={(nextValue) => {
