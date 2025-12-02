@@ -1,10 +1,15 @@
-import { Center, Image } from '@mantine/core';
+import { forwardRef } from 'react';
+import cx from 'clsx';
+import { Box, type MantineLoaderComponent } from '@mantine/core';
 import classes from './MeteomixLoader.module.css';
 
-export function MeteomixLoader() {
-  return (
-    <Center aria-label="Загрузка Meteomix" role="status">
-      <Image src="/meteomix.svg" alt="Загрузка Meteomix" h={40} w={40} className={classes.loader} />
-    </Center>
-  );
-}
+export const MeteomixLoader: MantineLoaderComponent = forwardRef(
+  ({ className, ...others }, ref) => (
+    <Box
+      component="span"
+      className={cx(classes.meteomixCssLoader, className)}
+      {...others}
+      ref={ref}
+    />
+  )
+);
