@@ -1,9 +1,11 @@
+import { env } from '@/shared/config/env';
+
 const GEOCODER_API = 'https://geocode-maps.yandex.ru/1.x/';
 
 export async function fetchCoordinates(cityName: string) {
   const url = new URL(GEOCODER_API);
 
-  url.searchParams.set('apikey', import.meta.env.VITE_YANDEX_GEOCODER_KEY_DEV);
+  url.searchParams.set('apikey', env.yandexGeocoderKey);
   url.searchParams.set('geocode', cityName);
   url.searchParams.set('format', 'json');
   url.searchParams.set('results', '1');
