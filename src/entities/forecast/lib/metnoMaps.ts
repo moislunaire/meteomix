@@ -1,13 +1,13 @@
 export function mapMetNoSymbol(code: string): string {
-  if (code.includes('clearsky')) return 'Clear';
-  if (code.includes('cloudy')) return 'Cloudy';
-  if (code.includes('fair')) return 'Partly cloudy';
-  if (code.includes('rain')) return 'Rain';
-  if (code.includes('snow')) return 'Snow';
-  if (code.includes('fog')) return 'Fog';
-  if (code.includes('sleet')) return 'Sleet';
-  if (code.includes('thunder')) return 'Thunderstorm';
-  return 'Unknown';
+  if (code.includes('clearsky')) return 'Ясно';
+  if (code.includes('cloudy')) return 'Облачно';
+  if (code.includes('fair')) return 'Переменная облачность';
+  if (code.includes('rain')) return 'Дождь';
+  if (code.includes('snow')) return 'Снег';
+  if (code.includes('fog')) return 'Туман';
+  if (code.includes('sleet')) return 'Мокрый снег';
+  if (code.includes('thunder')) return 'Гроза';
+  return 'Неизвестное состояние';
 }
 
 export function mapMetNoIcon(code: string): string {

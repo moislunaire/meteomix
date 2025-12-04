@@ -1,3 +1,4 @@
+import { mapConditionToRussian } from '../../lib/conditionTranslator';
 import type { NormalizedForecast, NormalizedForecastDay } from '../types';
 import type { WeatherApiResponse } from '../types.weatherapi';
 
@@ -9,7 +10,7 @@ export function normalizeWeatherApi(data: WeatherApiResponse): NormalizedForecas
       date: item.date,
       temp: Math.round(item.day.avgtemp_c),
       wind: Math.round(item.day.maxwind_kph / 3.6), // перевели km/h → m/s
-      condition: item.day.condition.text,
+      condition: mapConditionToRussian(item.day.condition.text),
       icon: convertWeatherApiIcon(item.day.condition.icon),
       source: 'weatherapi',
     })

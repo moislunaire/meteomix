@@ -1,3 +1,4 @@
+import { mapConditionToRussian } from '../../lib/conditionTranslator';
 import { mapVisualCrossingIcon } from '../../lib/visualCrossingMaps';
 import type { NormalizedForecast, NormalizedForecastDay } from '../types';
 import type { VisualCrossingResponse } from '../types.visualcrossing';
@@ -10,7 +11,7 @@ export function normalizeVisualCrossing(data: VisualCrossingResponse): Normalize
       date: day.datetime,
       temp: Math.round(day.temp),
       wind: Math.round(day.windspeed),
-      condition: day.conditions,
+      condition: mapConditionToRussian(day.conditions),
       icon: mapVisualCrossingIcon(day.icon),
       source: 'visualcrossing',
     })
