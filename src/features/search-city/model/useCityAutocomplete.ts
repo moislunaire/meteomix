@@ -18,7 +18,6 @@ export function useCityAutocomplete(onSelect: (city: CityResult) => void, initia
   }, [initialLabel]);
 
   const [input, setInput] = useState(initialLabel);
-  const [value, setValue] = useState<string | null>(initialLabel || null);
   const [debounced] = useDebouncedValue(input, 350);
 
   const [suggestions, setSuggestions] = useState<SuggestOption[]>(defaultOption);
@@ -30,7 +29,6 @@ export function useCityAutocomplete(onSelect: (city: CityResult) => void, initia
     if (!initialLabel) return;
 
     setInput(initialLabel);
-    setValue(initialLabel);
     setSuggestions((prev) => {
       const hasInitial = prev.some((option) => option.value === initialLabel);
       if (hasInitial) return prev;
@@ -78,8 +76,6 @@ export function useCityAutocomplete(onSelect: (city: CityResult) => void, initia
   // Выбор города
   const selectCity = useCallback(
     async (value: string) => {
-      setValue(value);
-
       const option = suggestions.find((suggestion) => suggestion.value === value);
       const item = rawItems.find((i) => formatSuggestLabel(i).value === value);
 
@@ -106,7 +102,5 @@ export function useCityAutocomplete(onSelect: (city: CityResult) => void, initia
     suggestions,
     loading,
     selectCity,
-    value,
-    setValue,
   };
 }
