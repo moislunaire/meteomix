@@ -35,7 +35,7 @@ export function ForecastTable({ forecasts, errors, isLoading, hasAnyData }: Prop
           </Table.Tr>
         </Table.Thead>
 
-        {/* 🟡 EMPTY STATE внутри таблицы */}
+        {/* EMPTY STATE внутри таблицы */}
         {!hasAnyData && !isLoading ? (
           <Table.Tbody>
             <Table.Tr>
