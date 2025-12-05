@@ -2,6 +2,7 @@ import { Container, Group, Space, Title } from '@mantine/core';
 
 import { useAllForecasts } from '@/features/load-forecast';
 import { CitySelect, useCityState, type CityResult } from '@/features/search-city';
+import { FORECAST_DAYS } from '@/shared/config/forecast';
 
 import { ForecastTable } from '@/widgets/forecast-table';
 import { AppHeader } from '@/widgets/app-header';
@@ -34,7 +35,7 @@ export function HomePage() {
       <Space h="xl" />
 
       <Title order={2} ta="center">
-        {city.label} — прогноз на 3 дня
+        {city.label} — прогноз на {FORECAST_DAYS} дней
       </Title>
 
       <Space h="lg" />

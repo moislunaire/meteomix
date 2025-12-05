@@ -1,11 +1,12 @@
 import { mapConditionToRussian } from '../../lib/conditionTranslator';
 import type { NormalizedForecast, NormalizedForecastDay } from '../types';
 import type { WeatherApiResponse } from '../types.weatherapi';
+import { FORECAST_DAYS } from '@/shared/config/forecast';
 
 export function normalizeWeatherApi(data: WeatherApiResponse): NormalizedForecast {
   if (!data?.forecast?.forecastday) return [];
 
-  return data.forecast.forecastday.slice(0, 3).map(
+  return data.forecast.forecastday.slice(0, FORECAST_DAYS).map(
     (item): NormalizedForecastDay => ({
       date: item.date,
       temp: Math.round(item.day.avgtemp_c),

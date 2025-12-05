@@ -7,6 +7,7 @@ import type {
   ForecastErrorsBySource,
   ForecastSourceId,
 } from '@/entities/forecast';
+import { FORECAST_DAYS } from '@/shared/config/forecast';
 
 const SOURCES: { key: ForecastSourceId; label: string }[] = [
   { key: 'openMeteo', label: 'Open-Meteo' },
@@ -14,6 +15,12 @@ const SOURCES: { key: ForecastSourceId; label: string }[] = [
   { key: 'weatherApi', label: 'WeatherAPI' },
   { key: 'visualCrossing', label: 'Visual Crossing' },
 ];
+
+const DATE_FORMATTER = new Intl.DateTimeFormat('ru-RU', {
+  weekday: 'short',
+  day: 'numeric',
+  month: 'numeric',
+});
 
 interface Props {
   forecasts: ForecastBySource;
@@ -23,15 +30,34 @@ interface Props {
 }
 
 export function ForecastTable({ forecasts, errors, isLoading, hasAnyData }: Props) {
+  const dayLabels = Array.from({ length: FORECAST_DAYS }, (_, idx) => {
+    const dateString =
+      forecasts.openMeteo?.[idx]?.date ??
+      forecasts.metNo?.[idx]?.date ??
+      forecasts.weatherApi?.[idx]?.date ??
+      forecasts.visualCrossing?.[idx]?.date;
+
+    if (dateString) {
+      const parsed = new Date(dateString);
+      if (!Number.isNaN(parsed.getTime())) {
+        return DATE_FORMATTER.format(parsed);
+      }
+    }
+
+    const fallback = new Date();
+    fallback.setDate(fallback.getDate() + idx);
+    return DATE_FORMATTER.format(fallback);
+  });
+
   return (
     <Paper shadow="sm" p="md" radius="md" withBorder>
       <Table highlightOnHover={hasAnyData} withTableBorder withColumnBorders>
         <Table.Thead>
           <Table.Tr>
             <Table.Th>Источник</Table.Th>
-            <Table.Th>Сегодня</Table.Th>
-            <Table.Th>Завтра</Table.Th>
-            <Table.Th>Послезавтра</Table.Th>
+            {dayLabels.map((label, idx) => (
+              <Table.Th key={idx}>{label}</Table.Th>
+            ))}
           </Table.Tr>
         </Table.Thead>
 
@@ -39,7 +65,7 @@ export function ForecastTable({ forecasts, errors, isLoading, hasAnyData }: Prop
         {!hasAnyData && !isLoading ? (
           <Table.Tbody>
             <Table.Tr>
-              <Table.Td colSpan={4}>
+              <Table.Td colSpan={FORECAST_DAYS + 1}>
                 <Group justify="center">
                   <IconAlertTriangle size={18} color="gold" />
                   <Text ta="center" c="dimmed" size="sm">
@@ -71,8 +97,8 @@ export function ForecastTable({ forecasts, errors, isLoading, hasAnyData }: Prop
                     ) : null}
                   </Table.Td>
 
-                  {/* 3 дня */}
-                  {[0, 1, 2].map((idx) => {
+                  {/* дни прогноза */}
+                  {Array.from({ length: FORECAST_DAYS }, (_, idx) => {
                     const day = days?.[idx];
 
                     if (isLoading && !day) {

@@ -1,4 +1,5 @@
 import { mapMetNoIcon, mapMetNoSymbol } from '../../lib/metnoMaps';
+import { FORECAST_DAYS } from '@/shared/config/forecast';
 import type { NormalizedForecast, NormalizedForecastDay } from '../types';
 import type { MetNoResponse, MetNoTimeseriesItem } from '../types.metno';
 
@@ -15,7 +16,7 @@ export function normalizeMetNo(data: MetNoResponse): NormalizedForecast {
     daysMap[date].push(item);
   });
 
-  const dates = Object.keys(daysMap).slice(0, 3);
+  const dates = Object.keys(daysMap).sort().slice(0, FORECAST_DAYS);
 
   return dates.map((date): NormalizedForecastDay => {
     const items = daysMap[date];

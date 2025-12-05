@@ -4,6 +4,7 @@ import { normalizeOpenMeteo } from '../model/normalize/openMeteo';
 import { normalizeMetNo } from '../model/normalize/metNo';
 import { normalizeWeatherApi } from '../model/normalize/weatherApi';
 import { normalizeVisualCrossing } from '../model/normalize/visualCrossing';
+import { FORECAST_DAYS } from '@/shared/config/forecast';
 
 import type { OpenMeteoResponse } from '../model/types.openMeteo';
 import type { MetNoResponse } from '../model/types.metno';
@@ -17,7 +18,7 @@ export const forecastApi = createApi({
     // 1. Open-Meteo
     getOpenMeteo: build.query({
       query: ({ lat, lon }) =>
-        `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_max,weathercode,windspeed_10m_max&forecast_days=3&timezone=auto`,
+        `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_max,weathercode,windspeed_10m_max&forecast_days=${FORECAST_DAYS}&timezone=auto`,
       transformResponse: (resp: OpenMeteoResponse) => normalizeOpenMeteo(resp),
     }),
 
@@ -37,7 +38,7 @@ export const forecastApi = createApi({
       query: ({ lat, lon }) =>
         `https://api.weatherapi.com/v1/forecast.json?key=${
           import.meta.env.VITE_WEATHERAPI_KEY
-        }&q=${lat},${lon}&days=3`,
+        }&q=${lat},${lon}&days=${FORECAST_DAYS}`,
       transformResponse: (resp: WeatherApiResponse) => normalizeWeatherApi(resp),
     }),
 

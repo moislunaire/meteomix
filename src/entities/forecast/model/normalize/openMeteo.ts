@@ -1,5 +1,6 @@
 import type { NormalizedForecast, NormalizedForecastDay } from '../types';
 import type { OpenMeteoResponse } from '../types.openMeteo';
+import { FORECAST_DAYS } from '@/shared/config/forecast';
 import { mapWeatherCode, mapWeatherIcon } from '@/entities/forecast/lib/weatherCodeMaps';
 
 export function normalizeOpenMeteo(data: OpenMeteoResponse): NormalizedForecast {
@@ -9,7 +10,7 @@ export function normalizeOpenMeteo(data: OpenMeteoResponse): NormalizedForecast 
 
   const { time, temperature_2m_max, windspeed_10m_max, weathercode } = daily;
 
-  return time.slice(0, 3).map(
+  return time.slice(0, FORECAST_DAYS).map(
     (date, index): NormalizedForecastDay => ({
       date,
       temp: Math.round(temperature_2m_max[index]),
