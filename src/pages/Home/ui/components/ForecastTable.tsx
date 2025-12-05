@@ -1,13 +1,14 @@
 import { Paper, Table, Text, Group, Tooltip } from '@mantine/core';
 import { IconAlertTriangle } from '@tabler/icons-react';
-import { SkeletonCell } from './SkeletonCell';
-import classes from './ForecastTable.module.css';
 import type {
   ForecastBySource,
   ForecastErrorsBySource,
   ForecastSourceId,
 } from '@/entities/forecast';
-import { FORECAST_DAYS } from '@/shared/config/forecast';
+import { FORECAST_DAYS } from '@/shared/config';
+
+import classes from './ForecastTable.module.css';
+import { SkeletonCell } from './SkeletonCell';
 
 const SOURCES: { key: ForecastSourceId; label: string }[] = [
   { key: 'openMeteo', label: 'Open-Meteo' },

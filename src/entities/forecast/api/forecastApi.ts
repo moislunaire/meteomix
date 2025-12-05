@@ -4,7 +4,7 @@ import { normalizeOpenMeteo } from '../model/normalize/openMeteo';
 import { normalizeMetNo } from '../model/normalize/metNo';
 import { normalizeWeatherApi } from '../model/normalize/weatherApi';
 import { normalizeVisualCrossing } from '../model/normalize/visualCrossing';
-import { FORECAST_DAYS } from '@/shared/config/forecast';
+import { FORECAST_DAYS } from '@/shared/config';
 
 import type { OpenMeteoResponse } from '../model/types.openMeteo';
 import type { MetNoResponse } from '../model/types.metno';

@@ -1,11 +1,13 @@
 import { Container, Group, Space, Title } from '@mantine/core';
 
-import { useAllForecasts } from '@/features/load-forecast';
-import { CitySelect, useCityState, type CityResult } from '@/features/search-city';
-import { FORECAST_DAYS } from '@/shared/config/forecast';
+import { FORECAST_DAYS } from '@/shared/config';
 
-import { ForecastTable } from '@/widgets/forecast-table';
-import { AppHeader } from '@/widgets/app-header';
+import { AppHeader } from './components/AppHeader';
+import { CitySelect } from './components/CitySelect';
+import { ForecastTable } from './components/ForecastTable';
+import { useAllForecasts } from '../model/useAllForecasts';
+import { type CityResult } from '../model/types';
+import { useCityState } from '../model/useCityState';
 
 export function HomePage() {
   const { city, setCity } = useCityState();

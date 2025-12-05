@@ -1,7 +1,7 @@
 import { mapConditionToRussian } from '../../lib/conditionTranslator';
 import type { NormalizedForecast, NormalizedForecastDay } from '../types';
 import type { WeatherApiResponse } from '../types.weatherapi';
-import { FORECAST_DAYS } from '@/shared/config/forecast';
+import { FORECAST_DAYS } from '@/shared/config';
 
 export function normalizeWeatherApi(data: WeatherApiResponse): NormalizedForecast {
   if (!data?.forecast?.forecastday) return [];

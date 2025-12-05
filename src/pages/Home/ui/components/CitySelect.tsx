@@ -1,6 +1,6 @@
 import { Autocomplete, Loader } from '@mantine/core';
-import { useCityAutocomplete } from '../model/useCityAutocomplete';
-import type { CityResult } from '../model/types';
+import { useCityAutocomplete } from '../../model/useCityAutocomplete';
+import type { CityResult } from '../../model/types';
 import { IconSearch } from '@tabler/icons-react';
 
 interface Props {

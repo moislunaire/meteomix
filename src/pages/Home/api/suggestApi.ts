@@ -1,4 +1,4 @@
-import { env } from '@/shared/config/env';
+import { env } from '@/shared/config';
 
 const SUGGEST_API = 'https://suggest-maps.yandex.ru/v1/suggest';
 

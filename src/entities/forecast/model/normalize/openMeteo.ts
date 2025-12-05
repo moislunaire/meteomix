@@ -1,6 +1,6 @@
 import type { NormalizedForecast, NormalizedForecastDay } from '../types';
 import type { OpenMeteoResponse } from '../types.openMeteo';
-import { FORECAST_DAYS } from '@/shared/config/forecast';
+import { FORECAST_DAYS } from '@/shared/config';
 import { mapWeatherCode, mapWeatherIcon } from '@/entities/forecast/lib/weatherCodeMaps';
 
 export function normalizeOpenMeteo(data: OpenMeteoResponse): NormalizedForecast {

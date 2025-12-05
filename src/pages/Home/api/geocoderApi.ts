@@ -1,4 +1,4 @@
-import { env } from '@/shared/config/env';
+import { env } from '@/shared/config';
 
 const GEOCODER_API = 'https://geocode-maps.yandex.ru/1.x/';
 

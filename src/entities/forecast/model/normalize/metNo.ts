@@ -1,5 +1,5 @@
 import { mapMetNoIcon, mapMetNoSymbol } from '../../lib/metnoMaps';
-import { FORECAST_DAYS } from '@/shared/config/forecast';
+import { FORECAST_DAYS } from '@/shared/config';
 import type { NormalizedForecast, NormalizedForecastDay } from '../types';
 import type { MetNoResponse, MetNoTimeseriesItem } from '../types.metno';
 

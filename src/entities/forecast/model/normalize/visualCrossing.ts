@@ -2,7 +2,7 @@ import { mapConditionToRussian } from '../../lib/conditionTranslator';
 import { mapVisualCrossingIcon } from '../../lib/visualCrossingMaps';
 import type { NormalizedForecast, NormalizedForecastDay } from '../types';
 import type { VisualCrossingResponse } from '../types.visualcrossing';
-import { FORECAST_DAYS } from '@/shared/config/forecast';
+import { FORECAST_DAYS } from '@/shared/config';
 
 export function normalizeVisualCrossing(data: VisualCrossingResponse): NormalizedForecast {
   if (!data?.days) return [];
