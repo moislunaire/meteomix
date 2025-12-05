@@ -23,6 +23,21 @@ const DATE_FORMATTER = new Intl.DateTimeFormat('ru-RU', {
   month: 'numeric',
 });
 
+function calculateMedian(values: number[]): number | null {
+  if (values.length === 0) {
+    return null;
+  }
+
+  const sorted = [...values].sort((a, b) => a - b);
+  const middleIndex = Math.floor(sorted.length / 2);
+
+  if (sorted.length % 2 === 0) {
+    return (sorted[middleIndex - 1] + sorted[middleIndex]) / 2;
+  }
+
+  return sorted[middleIndex];
+}
+
 interface Props {
   forecasts: ForecastBySource;
   errors: ForecastErrorsBySource;
@@ -50,14 +65,32 @@ export function ForecastTable({ forecasts, errors, isLoading, hasAnyData }: Prop
     return DATE_FORMATTER.format(fallback);
   });
 
+  const medianTempsByDay = Array.from({ length: FORECAST_DAYS }, (_, idx) => {
+    const temps = SOURCES.flatMap(({ key }) => {
+      const day = forecasts[key]?.[idx];
+
+      if (errors[key] || !day) {
+        return [];
+      }
+
+      return [day.temp];
+    });
+
+    const median = calculateMedian(temps);
+
+    return median === null ? null : Math.round(median);
+  });
+
   return (
     <Paper shadow="sm" p="md" radius="md" withBorder>
       <Table highlightOnHover={hasAnyData} withTableBorder withColumnBorders>
         <Table.Thead>
           <Table.Tr>
-            <Table.Th>Источник</Table.Th>
+            <Table.Th className={classes['colored-row']}>Источник</Table.Th>
             {dayLabels.map((label, idx) => (
-              <Table.Th key={idx}>{label}</Table.Th>
+              <Table.Th key={idx} className={classes['colored-row']}>
+                {label}
+              </Table.Th>
             ))}
           </Table.Tr>
         </Table.Thead>
@@ -126,6 +159,25 @@ export function ForecastTable({ forecasts, errors, isLoading, hasAnyData }: Prop
                 </Table.Tr>
               );
             })}
+
+            <Table.Tr className={classes['colored-row']}>
+              <Table.Td>Среднее</Table.Td>
+              {medianTempsByDay.map((medianTemp, idx) => {
+                if (isLoading && medianTemp === null) {
+                  return (
+                    <Table.Td key={idx}>
+                      <SkeletonCell />
+                    </Table.Td>
+                  );
+                }
+
+                if (medianTemp === null) {
+                  return <Table.Td key={idx}>—</Table.Td>;
+                }
+
+                return <Table.Td key={idx}>{medianTemp}°C</Table.Td>;
+              })}
+            </Table.Tr>
           </Table.Tbody>
         )}
       </Table>

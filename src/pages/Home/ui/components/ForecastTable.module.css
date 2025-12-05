@@ -7,3 +7,7 @@
   display: inline-block;
 }
 
+.colored-row {
+  background-color: var(--mantine-color-blue-0) !important;
+}
+
