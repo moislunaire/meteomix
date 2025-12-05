@@ -82,7 +82,7 @@ export function ForecastTable({ forecasts, errors, isLoading, hasAnyData }: Prop
               const isError = errors[key];
 
               return (
-                <Table.Tr key={key} className={isError ? classes.rowError : undefined}>
+                <Table.Tr key={key} className={isError ? classes['row-error'] : undefined}>
                   {/* источник */}
                   <Table.Td>
                     {label}{' '}
@@ -92,7 +92,7 @@ export function ForecastTable({ forecasts, errors, isLoading, hasAnyData }: Prop
                         withArrow
                         color="red"
                       >
-                        <span className={classes.errorIcon}>⚠️</span>
+                        <span className={classes['error-icon']}>⚠️</span>
                       </Tooltip>
                     ) : null}
                   </Table.Td>

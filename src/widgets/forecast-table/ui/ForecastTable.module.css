@@ -1,8 +1,8 @@
-.rowError {
+.row-error {
   opacity: 0.4;
 }
 
-.errorIcon {
+.error-icon {
   cursor: help;
   display: inline-block;
 }
