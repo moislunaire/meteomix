@@ -4,11 +4,11 @@ const CONDITION_MAP: { keywords: string[]; value: string }[] = [
   { keywords: ['snow', 'blizzard', 'flurries'], value: 'Снег' },
   { keywords: ['drizzle', 'rain', 'shower'], value: 'Дождь' },
   { keywords: ['fog', 'mist', 'haze'], value: 'Туман' },
-  { keywords: ['overcast', 'cloud'], value: 'Облачно' },
   {
     keywords: ['partly sunny', 'partly cloudy', 'mostly sunny', 'fair'],
     value: 'Переменная облачность',
   },
+  { keywords: ['overcast', 'cloud'], value: 'Облачно' },
   { keywords: ['clear', 'sunny', 'bright'], value: 'Ясно' },
 ];
 
