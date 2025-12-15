@@ -19,7 +19,9 @@
     "lint:fix": "npm-run-all --parallel --print-label lint:eslint:fix lint:stylelint:fix lint:fsd:fix",
     "preview": "vite preview",
     "analyze": "fsd-crawler",
-    "prepare": "node .husky/install.mjs"
+    "prepare": "node .husky/install.mjs",
+    "vercel:dev": "vercel dev", 
+    "vercel:logs": "vercel logs --since=1h --local"
   },
   "dependencies": {
     "@mantine/core": "^8.3.9",
@@ -38,6 +40,7 @@
     "@types/react-dom": "^19.2.3",
     "@typescript-eslint/eslint-plugin": "^8.48.0",
     "@typescript-eslint/parser": "^8.48.0",
+    "@vercel/node": "^5.5.15",
     "@vitejs/plugin-react-swc": "^4.2.2",
     "@vitest/coverage-v8": "^2.1.9",
     "eslint": "^9.39.1",
@@ -56,6 +59,7 @@
     "stylelint-config-standard": "^39.0.1",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.46.4",
+    "vercel": "^50.0.1",
     "vite": "^7.2.4",
     "vitest": "^2.1.9"
   }
