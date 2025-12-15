@@ -20,8 +20,7 @@
     "preview": "vite preview",
     "analyze": "fsd-crawler",
     "prepare": "node .husky/install.mjs",
-    "vercel:dev": "vercel dev", 
-    "vercel:logs": "vercel logs --since=1h --local"
+    "vercel:dev": "vercel dev"
   },
   "dependencies": {
     "@mantine/core": "^8.3.9",

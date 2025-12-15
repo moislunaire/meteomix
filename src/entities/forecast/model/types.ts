@@ -14,14 +14,14 @@ export interface NormalizedForecastDay {
   /** Максимальная скорость ветра в м/с */
   wind: number;
 
-  /** Название источника (open-meteo, metno, weatherapi, visualcrossing) */
+  /** Название источника (open-meteo, metno, visualcrossing) */
   source: string;
 }
 
 export type NormalizedForecast = NormalizedForecastDay[];
 
 // общий тип для идентификаторов источников
-export type ForecastSourceId = 'openMeteo' | 'metNo' | 'weatherApi' | 'visualCrossing';
+export type ForecastSourceId = 'openMeteo' | 'metNo' | 'visualCrossing';
 
 // данные по источникам
 export type ForecastBySource = Partial<Record<ForecastSourceId, NormalizedForecast | undefined>>;

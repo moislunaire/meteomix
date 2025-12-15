@@ -13,7 +13,6 @@ import { SkeletonCell } from './SkeletonCell';
 const SOURCES: { key: ForecastSourceId; label: string }[] = [
   { key: 'openMeteo', label: 'Open-Meteo' },
   { key: 'metNo', label: 'MET Norway' },
-  { key: 'weatherApi', label: 'WeatherAPI' },
   { key: 'visualCrossing', label: 'Visual Crossing' },
 ];
 
@@ -50,7 +49,6 @@ export function ForecastTable({ forecasts, errors, isLoading, hasAnyData }: Prop
     const dateString =
       forecasts.openMeteo?.[idx]?.date ??
       forecasts.metNo?.[idx]?.date ??
-      forecasts.weatherApi?.[idx]?.date ??
       forecasts.visualCrossing?.[idx]?.date;
 
     if (dateString) {

@@ -2,27 +2,25 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { normalizeOpenMeteo } from '../model/normalize/openMeteo';
 import { normalizeMetNo } from '../model/normalize/metNo';
-import { normalizeWeatherApi } from '../model/normalize/weatherApi';
 import { normalizeVisualCrossing } from '../model/normalize/visualCrossing';
 import { FORECAST_DAYS } from '@/shared/config';
 
 import type { OpenMeteoResponse } from '../model/types.openMeteo';
 import type { MetNoResponse } from '../model/types.metno';
-import type { WeatherApiResponse } from '../model/types.weatherapi';
 import type { VisualCrossingResponse } from '../model/types.visualcrossing';
 
 export const forecastApi = createApi({
   reducerPath: 'forecastApi',
   baseQuery: fetchBaseQuery({}),
   endpoints: (build) => ({
-    // 1. Open-Meteo
+    // Open-Meteo
     getOpenMeteo: build.query({
       query: ({ lat, lon }) =>
         `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_max,weathercode,windspeed_10m_max&forecast_days=${FORECAST_DAYS}&timezone=auto`,
       transformResponse: (resp: OpenMeteoResponse) => normalizeOpenMeteo(resp),
     }),
 
-    // 2. MET Norway
+    // MET Norway
     getMetNo: build.query({
       query: ({ lat, lon }) => ({
         url: `https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=${lat}&lon=${lon}`,
@@ -33,14 +31,7 @@ export const forecastApi = createApi({
       transformResponse: (resp: MetNoResponse) => normalizeMetNo(resp),
     }),
 
-    // 3. WeatherAPI
-    getWeatherApi: build.query({
-      query: ({ lat, lon }) =>
-        `/api/weatherapi?q=${encodeURIComponent(`${lat},${lon}`)}&days=${FORECAST_DAYS}`,
-      transformResponse: (resp: WeatherApiResponse) => normalizeWeatherApi(resp),
-    }),
-
-    // 4. VisualCrossing
+    // VisualCrossing
     getVisualCrossing: build.query({
       query: ({ lat, lon }) =>
         `/api/visualcrossing?location=${encodeURIComponent(`${lat},${lon}`)}&unitGroup=metric`,
@@ -49,9 +40,4 @@ export const forecastApi = createApi({
   }),
 });
 
-export const {
-  useGetOpenMeteoQuery,
-  useGetMetNoQuery,
-  useGetWeatherApiQuery,
-  useGetVisualCrossingQuery,
-} = forecastApi;
+export const { useGetOpenMeteoQuery, useGetMetNoQuery, useGetVisualCrossingQuery } = forecastApi;

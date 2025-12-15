@@ -1,7 +1,6 @@
 import {
   useGetMetNoQuery,
   useGetOpenMeteoQuery,
-  useGetWeatherApiQuery,
   useGetVisualCrossingQuery,
   type ForecastBySource,
   type ForecastErrorsBySource,
@@ -10,28 +9,25 @@ import {
 export function useAllForecasts(lat: number, lon: number) {
   const openMeteo = useGetOpenMeteoQuery({ lat, lon });
   const metNo = useGetMetNoQuery({ lat, lon });
-  const weather = useGetWeatherApiQuery({ lat, lon });
   const visual = useGetVisualCrossingQuery({ lat, lon });
 
-  const isLoading = openMeteo.isLoading || metNo.isLoading || weather.isLoading || visual.isLoading;
+  const isLoading = openMeteo.isLoading || metNo.isLoading || visual.isLoading;
 
-  const isError = openMeteo.isError || metNo.isError || weather.isError || visual.isError;
+  const isError = openMeteo.isError || metNo.isError || visual.isError;
 
   const data: ForecastBySource = {
     openMeteo: openMeteo.data,
     metNo: metNo.data,
-    weatherApi: weather.data,
     visualCrossing: visual.data,
   };
 
   const errors: ForecastErrorsBySource = {
     openMeteo: !!openMeteo.isError,
     metNo: !!metNo.isError,
-    weatherApi: !!weather.isError,
     visualCrossing: !!visual.isError,
   };
 
-  const hasAnyData = !!data.openMeteo || !!data.metNo || !!data.weatherApi || !!data.visualCrossing;
+  const hasAnyData = !!data.openMeteo || !!data.metNo || !!data.visualCrossing;
 
   return {
     isLoading,

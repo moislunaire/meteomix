@@ -2,7 +2,6 @@ export type { ForecastBySource, ForecastErrorsBySource, ForecastSourceId } from 
 export {
   useGetMetNoQuery,
   useGetOpenMeteoQuery,
-  useGetWeatherApiQuery,
   useGetVisualCrossingQuery,
   forecastApi,
 } from './api/forecastApi';
