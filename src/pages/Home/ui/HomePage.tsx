@@ -1,4 +1,5 @@
-import { Container, Group, Space, Title } from '@mantine/core';
+import { Container, Group, Space, Title, Alert } from '@mantine/core';
+import { IconAlertTriangle } from '@tabler/icons-react';
 
 import { FORECAST_DAYS } from '@/shared/config';
 
@@ -6,13 +7,28 @@ import { AppHeader } from './components/AppHeader';
 import { CitySelect } from './components/CitySelect';
 import { ForecastTable } from './components/ForecastTable';
 import { useAllForecasts } from '../model/useAllForecasts';
-import { type CityResult } from '../model/types';
-import { useCityState } from '../model/useCityState';
+import { useCityStateWithGeolocation } from '../model/useCityStateWithGeolocation';
+import type { CityResult } from '../model/types';
 
 export function HomePage() {
-  const { city, setCity } = useCityState();
+  const {
+    city,
+    setCity,
+    geolocationLoading,
+    geolocationError,
+    getCurrentLocation,
+    isGeolocationSupported,
+  } = useCityStateWithGeolocation();
 
   const { data, errors, isLoading, hasAnyData } = useAllForecasts(city.lat, city.lon);
+
+  const handleCitySelect = (selectedCity: CityResult) => {
+    setCity({
+      label: selectedCity.fullName,
+      lat: selectedCity.lat,
+      lon: selectedCity.lon,
+    });
+  };
 
   return (
     <Container size="md" py="xl">
@@ -22,17 +38,24 @@ export function HomePage() {
 
       <Space h="xl" />
 
-      {/* Поиск города */}
+      {/* Поиск города с геолокацией */}
       <CitySelect
         selectedCity={city.label}
-        onSelect={(selectedCity: CityResult) => {
-          setCity({
-            label: selectedCity.fullName,
-            lat: selectedCity.lat,
-            lon: selectedCity.lon,
-          });
-        }}
+        onSelect={handleCitySelect}
+        onGetCurrentLocation={getCurrentLocation}
+        geolocationLoading={geolocationLoading}
+        isGeolocationSupported={isGeolocationSupported}
       />
+
+      {/* Ошибка геолокации */}
+      {geolocationError && (
+        <>
+          <Space h="sm" />
+          <Alert icon={<IconAlertTriangle size={16} />} color="red" variant="light">
+            {geolocationError}
+          </Alert>
+        </>
+      )}
 
       <Space h="xl" />
 
