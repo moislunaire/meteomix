@@ -1,10 +1,10 @@
 /**
  * Утилита для управления лимитами и кэшированием запросов к Яндекс Геокодер API
- * 
+ *
  * Лимиты бесплатного плана:
  * - 1000 запросов в сутки для HTTP API Геокодера
  * - При превышении лимита доступ может быть приостановлен до конца дня
- * 
+ *
  * Рекомендации:
  * - Кэшировать результаты на срок до 30 дней
  */
@@ -39,19 +39,19 @@ function getCached<T>(type: 'forward' | 'reverse', query: string): T | null {
   try {
     const key = getCacheKey(type, query);
     const cached = localStorage.getItem(key);
-    
+
     if (!cached) return null;
-    
+
     const entry: CacheEntry<T> = JSON.parse(cached);
     const now = Date.now();
     const expiryTime = CACHE_EXPIRY_DAYS * 24 * 60 * 60 * 1000;
-    
+
     // Проверяем, не истек ли срок кэша
     if (now - entry.timestamp > expiryTime) {
       localStorage.removeItem(key);
       return null;
     }
-    
+
     return entry.data;
   } catch {
     return null;
@@ -81,14 +81,14 @@ function getTodayRequestsCount(): number {
   try {
     const dateKey = localStorage.getItem(`${STORAGE_PREFIX}${REQUESTS_DATE_KEY}`);
     const today = new Date().toDateString();
-    
+
     // Если дата не совпадает с сегодняшней, сбрасываем счетчик
     if (dateKey !== today) {
       localStorage.setItem(`${STORAGE_PREFIX}${REQUESTS_DATE_KEY}`, today);
       localStorage.setItem(`${STORAGE_PREFIX}${REQUESTS_COUNT_KEY}`, '0');
       return 0;
     }
-    
+
     const count = localStorage.getItem(`${STORAGE_PREFIX}${REQUESTS_COUNT_KEY}`);
     return count ? parseInt(count, 10) : 0;
   } catch {
@@ -113,11 +113,11 @@ function incrementRequestsCount(): void {
  */
 export function checkRateLimit(): void {
   const count = getTodayRequestsCount();
-  
+
   if (count >= DAILY_LIMIT) {
     throw new Error(
       `Достигнут дневной лимит запросов к API Геокодера (${DAILY_LIMIT} запросов). ` +
-      `Доступ будет восстановлен завтра.`
+        `Доступ будет восстановлен завтра.`
     );
   }
 }
@@ -135,17 +135,17 @@ export async function withCache<T>(
   if (cached !== null) {
     return cached;
   }
-  
+
   // Проверяем лимит перед выполнением запроса
   checkRateLimit();
-  
+
   // Выполняем запрос
   const data = await fetcher();
-  
+
   // Сохраняем в кэш и увеличиваем счетчик
   setCached(type, query, data);
   incrementRequestsCount();
-  
+
   return data;
 }
 
@@ -162,4 +162,3 @@ export function getCurrentRequestsCount(): number {
 export function getRemainingRequests(): number {
   return Math.max(0, DAILY_LIMIT - getTodayRequestsCount());
 }
-

@@ -1,5 +1,5 @@
 import { env } from '@/shared/config';
-import { withCache, checkRateLimit } from './geocoderLimits';
+import { withCache } from './geocoderLimits';
 
 const GEOCODER_API = 'https://geocode-maps.yandex.ru/1.x/';
 
@@ -13,7 +13,7 @@ export async function fetchCoordinates(cityName: string) {
     url.searchParams.set('results', '1');
 
     const res = await fetch(url.toString());
-    
+
     // Обработка ошибок API
     if (!res.ok) {
       if (res.status === 403 || res.status === 429) {
@@ -60,7 +60,7 @@ export async function reverseGeocode(lat: number, lon: number): Promise<string> 
     url.searchParams.set('kind', 'locality'); // Приоритет населенным пунктам
 
     const res = await fetch(url.toString());
-    
+
     // Обработка ошибок API
     if (!res.ok) {
       if (res.status === 403 || res.status === 429) {

@@ -6,6 +6,7 @@ import { FORECAST_DAYS } from '@/shared/config';
 import { AppHeader } from './components/AppHeader';
 import { CitySelect } from './components/CitySelect';
 import { ForecastTable } from './components/ForecastTable';
+import { GeocoderRequestsCounter } from './components/GeocoderRequestsCounter';
 import { useAllForecasts } from '../model/useAllForecasts';
 import { useCityStateWithGeolocation } from '../model/useCityStateWithGeolocation';
 import type { CityResult } from '../model/types';
@@ -31,7 +32,9 @@ export function HomePage() {
   };
 
   return (
-    <Container size="md" py="xl">
+    <Container size="md" py="xl" style={{ position: 'relative' }}>
+      <GeocoderRequestsCounter />
+
       <Group justify="center">
         <AppHeader />
       </Group>
