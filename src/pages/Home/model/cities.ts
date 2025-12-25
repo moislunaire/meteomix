@@ -1,7 +1,9 @@
 export interface CityLocation {
   /** Название для отображения (на русском) */
   label: string;
+  /** Широта в градусах */
   lat: number;
+  /** Долгота в градусах */
   lon: number;
 }
 

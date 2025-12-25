@@ -1,5 +1,6 @@
 import { Container, Group, Space, Title, Alert } from '@mantine/core';
 import { IconAlertTriangle } from '@tabler/icons-react';
+import { useState } from 'react';
 
 import { FORECAST_DAYS } from '@/shared/config';
 
@@ -21,9 +22,12 @@ export function HomePage() {
     isGeolocationSupported,
   } = useCityStateWithGeolocation();
 
+  const [favoritesError, setFavoritesError] = useState<string | null>(null);
+
   const { data, errors, isLoading, hasAnyData } = useAllForecasts(city.lat, city.lon);
 
   const handleCitySelect = (selectedCity: CityResult) => {
+    setFavoritesError(null);
     setCity({
       label: selectedCity.fullName,
       lat: selectedCity.lat,
@@ -44,10 +48,12 @@ export function HomePage() {
       {/* Поиск города с геолокацией */}
       <CitySelect
         selectedCity={city.label}
+        currentCity={city}
         onSelect={handleCitySelect}
         onGetCurrentLocation={getCurrentLocation}
         geolocationLoading={geolocationLoading}
         isGeolocationSupported={isGeolocationSupported}
+        handleFavoritesError={setFavoritesError}
       />
 
       {/* Ошибка геолокации */}
@@ -56,6 +62,16 @@ export function HomePage() {
           <Space h="sm" />
           <Alert icon={<IconAlertTriangle size={16} />} color="red" variant="light">
             {geolocationError}
+          </Alert>
+        </>
+      )}
+
+      {/* Ошибка избранного */}
+      {favoritesError && (
+        <>
+          <Space h="sm" />
+          <Alert icon={<IconAlertTriangle size={16} />} color="orange" variant="light">
+            {favoritesError}
           </Alert>
         </>
       )}

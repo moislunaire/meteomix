@@ -1,34 +1,84 @@
-import { Autocomplete, Loader, Group, ActionIcon, Tooltip } from '@mantine/core';
+import { Autocomplete, Loader, Group, Button } from '@mantine/core';
+import { notifications } from '@mantine/notifications';
 import { useCityAutocomplete } from '../../model/useCityAutocomplete';
 import type { CityResult } from '../../model/types';
-import { IconSearch, IconMapPin } from '@tabler/icons-react';
+import type { CityLocation } from '../../model/cities';
+import { useFavorites } from '../../model/useFavorites';
+import { IconSearch, IconMapPin, IconStar, IconCheck } from '@tabler/icons-react';
+import { useEffect } from 'react';
 
 type Props = {
   onSelect: (city: CityResult) => void;
   /** Название текущего выбранного города */
   selectedCity?: string;
+  /** Текущая локация города */
+  currentCity?: CityLocation;
   /** Функция для получения текущего местоположения */
   onGetCurrentLocation?: () => Promise<void>;
   /** Состояние загрузки геолокации */
   geolocationLoading?: boolean;
   /** Поддерживается ли геолокация */
   isGeolocationSupported?: boolean;
+  /** Метод для обработки ошибок избранного */
+  handleFavoritesError?: (error: string | null) => void;
 };
 
 export function CitySelect({
   onSelect,
   selectedCity,
+  currentCity,
   onGetCurrentLocation,
   geolocationLoading = false,
   isGeolocationSupported = false,
+  handleFavoritesError,
 }: Props) {
   const { input, setInput, suggestions, loading, selectCity } = useCityAutocomplete(
     onSelect,
     selectedCity
   );
+  const { favorites, addFavorite, error: favoritesError, clearError } = useFavorites();
+
+  // Передаем ошибку избранного в родительский компонент
+  useEffect(() => {
+    if (handleFavoritesError) {
+      handleFavoritesError(favoritesError);
+    }
+  }, [favoritesError, handleFavoritesError]);
+
+  const handleAddToFavorites = () => {
+    if (!currentCity) return;
+
+    clearError();
+    const success = addFavorite(currentCity);
+
+    if (success) {
+      notifications.show({
+        title: 'Успешно добавлено',
+        message: `${currentCity.label} добавлен в избранное`,
+        color: 'green',
+        icon: <IconCheck size={18} />,
+      });
+    }
+  };
+
+  const isAlreadyInFavorites = currentCity
+    ? favorites.some((fav) => fav.lat === currentCity.lat && fav.lon === currentCity.lon)
+    : false;
 
   return (
     <Group>
+      {isGeolocationSupported && onGetCurrentLocation && (
+        <Button
+          variant="light"
+          leftSection={<IconMapPin size={18} stroke={1.5} />}
+          loading={geolocationLoading}
+          onClick={onGetCurrentLocation}
+          aria-label="Определить местоположение"
+        >
+          Найти меня
+        </Button>
+      )}
+
       <Autocomplete
         clearable
         value={input}
@@ -42,18 +92,16 @@ export function CitySelect({
         style={{ flex: 1 }}
       />
 
-      {isGeolocationSupported && onGetCurrentLocation && (
-        <Tooltip label="Определить моё местоположение">
-          <ActionIcon
-            variant="light"
-            size="lg"
-            loading={geolocationLoading}
-            onClick={onGetCurrentLocation}
-            aria-label="Определить местоположение"
-          >
-            <IconMapPin size={18} stroke={1.5} />
-          </ActionIcon>
-        </Tooltip>
+      {currentCity && (
+        <Button
+          variant="light"
+          leftSection={<IconStar size={18} stroke={1.5} />}
+          onClick={handleAddToFavorites}
+          disabled={isAlreadyInFavorites}
+          aria-label="Добавить в избранное"
+        >
+          В избранное
+        </Button>
       )}
     </Group>
   );
