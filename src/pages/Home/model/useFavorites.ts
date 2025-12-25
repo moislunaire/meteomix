@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef, createElement } from 'react';
 import { notifications } from '@mantine/notifications';
 import { IconAlertTriangle } from '@tabler/icons-react';
+import { isLocationExists } from '@/shared/lib/locationUtils';
 import type { CityLocation } from './cities';
 
 const FAVORITES_STORAGE_KEY = 'meteomix_favorites';
@@ -12,55 +13,6 @@ export type FavoriteLocation = CityLocation & {
   /** Время создания записи в избранном (timestamp в миллисекундах) */
   createdAt: number;
 };
-
-// Функция для нормализации названия (убирает лишние пробелы, приводит к нижнему регистру)
-function normalizeName(name: string): string {
-  return name.toLowerCase().trim().replace(/\s+/g, ' ').replace(/[.,]/g, ''); // убираем запятые и точки
-}
-
-// Функция для извлечения ключевых слов из названия
-function getKeyWords(name: string): string[] {
-  const normalized = normalizeName(name);
-  return normalized.split(' ').filter((word) => word.length > 2); // убираем короткие слова
-}
-
-// Функция для сравнения названий по пересечению ключевых слов
-function isSimilar(a: string, b: string): boolean {
-  const aWords = getKeyWords(a);
-  const bWords = getKeyWords(b);
-
-  // Если есть пересечение ключевых слов, считаем названия похожими
-  return aWords.some((word) => bWords.includes(word));
-}
-
-// Функция для округления координат (до 3 знаков после запятой ≈ 100 метров точности)
-function roundCoordinates(lat: number, lon: number): { lat: number; lon: number } {
-  return {
-    lat: Math.round(lat * 1000) / 1000,
-    lon: Math.round(lon * 1000) / 1000,
-  };
-}
-
-function isLocationExists(
-  favorites: Array<{ lat: number; lon: number; label: string }>,
-  location: { lat: number; lon: number; label: string }
-): boolean {
-  const roundedLocation = roundCoordinates(location.lat, location.lon);
-
-  return favorites.some((fav) => {
-    const roundedFav = roundCoordinates(fav.lat, fav.lon);
-
-    // Сравнение по координатам (округленным)
-    const coordinatesMatch =
-      roundedFav.lat === roundedLocation.lat && roundedFav.lon === roundedLocation.lon;
-
-    // Сравнение по названиям
-    const namesMatch = fav.label && location.label && isSimilar(fav.label, location.label);
-
-    // Считаем локацию существующей, если совпадают либо координаты, либо названия
-    return coordinatesMatch || namesMatch;
-  });
-}
 
 // Функция для загрузки избранного из localStorage
 function loadFavoritesFromStorage(): FavoriteLocation[] {

@@ -4,6 +4,7 @@ import { useCityAutocomplete } from '../../model/useCityAutocomplete';
 import type { CityResult } from '../../model/types';
 import type { CityLocation } from '../../model/cities';
 import { useFavorites } from '../../model/useFavorites';
+import { isLocationExists } from '@/shared/lib/locationUtils';
 import { IconSearch, IconMapPin, IconStar, IconCheck } from '@tabler/icons-react';
 import { useEffect } from 'react';
 
@@ -61,9 +62,7 @@ export function CitySelect({
     }
   };
 
-  const isAlreadyInFavorites = currentCity
-    ? favorites.some((fav) => fav.lat === currentCity.lat && fav.lon === currentCity.lon)
-    : false;
+  const isAlreadyInFavorites = currentCity ? isLocationExists(favorites, currentCity) : false;
 
   return (
     <Group>
