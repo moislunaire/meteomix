@@ -64,9 +64,7 @@ export async function reverseGeocode(lat: number, lon: number): Promise<string> 
     // Обработка ошибок API
     if (!res.ok) {
       if (res.status === 403 || res.status === 429) {
-        throw new Error(
-          'Превышен лимит запросов к API Геокодера. Попробуйте позже или используйте кэшированные результаты.'
-        );
+        throw new Error('Превышен лимит запросов к API Геокодера.');
       }
       throw new Error('Reverse geocoder error');
     }
@@ -81,9 +79,11 @@ export async function reverseGeocode(lat: number, lon: number): Promise<string> 
     const geoObject = featureMember[0].GeoObject;
     // Используем name или description в зависимости от того, что доступно
     const locationName =
-      geoObject.name ||
-      geoObject.description ||
-      `Местоположение (${lat.toFixed(4)}, ${lon.toFixed(4)})`;
+      geoObject.name && geoObject.description
+        ? `${geoObject.name}, ${geoObject.description}`
+        : geoObject.name ||
+          geoObject.description ||
+          `Местоположение (${lat.toFixed(4)}, ${lon.toFixed(4)})`;
 
     return locationName;
   });
