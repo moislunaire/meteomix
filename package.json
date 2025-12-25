@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "vercel:dev": "vercel dev",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "test": "vitest run",
@@ -19,8 +20,7 @@
     "lint:fix": "npm-run-all --parallel --print-label lint:eslint:fix lint:stylelint:fix lint:fsd:fix",
     "preview": "vite preview",
     "analyze": "fsd-crawler",
-    "prepare": "node .husky/install.mjs",
-    "vercel:dev": "vercel dev"
+    "prepare": "node .husky/install.mjs"
   },
   "dependencies": {
     "@mantine/core": "^8.3.9",
