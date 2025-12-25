@@ -37,8 +37,6 @@ export function useCityStateWithGeolocation(): UseCityStateWithGeolocationReturn
   } = useGeolocation(onLocationSelect);
 
   // Автоматически запускаем геолокацию при загрузке страницы
-  // onLocationSelect стабилен (useCallback), поэтому getCurrentLocation тоже стабилен
-  // isGeolocationSupported не меняется во время работы приложения
   useEffect(() => {
     if (isGeolocationSupported) {
       getCurrentLocation();
