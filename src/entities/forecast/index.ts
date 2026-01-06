@@ -1,4 +1,9 @@
-export type { ForecastBySource, ForecastErrorsBySource, ForecastSourceId } from './model/types';
+export type {
+  ForecastBySource,
+  ForecastErrorsBySource,
+  ForecastSourceId,
+  NormalizedForecastDay,
+} from './model/types';
 export {
   useGetMetNoQuery,
   useGetOpenMeteoQuery,

@@ -6,3 +6,4 @@ export * from './useCityAutocomplete';
 export * from './useCityState';
 export * from './useCityStateWithGeolocation';
 export * from './useGeolocation';
+export * from './favorites';

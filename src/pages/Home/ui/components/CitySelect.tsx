@@ -3,7 +3,7 @@ import { notifications } from '@mantine/notifications';
 import { useCityAutocomplete } from '../../model/useCityAutocomplete';
 import type { CityResult } from '../../model/types';
 import type { CityLocation } from '../../model/cities';
-import { useFavorites } from '../../model/useFavorites';
+import { useFavorites } from '../../model/favorites';
 import { isLocationExists } from '@/shared/lib/locationUtils';
 import { IconSearch, IconMapPin, IconStar, IconCheck } from '@tabler/icons-react';
 import { useEffect } from 'react';

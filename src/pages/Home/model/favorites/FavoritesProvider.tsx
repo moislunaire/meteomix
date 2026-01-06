@@ -1,26 +1,20 @@
+import React from 'react';
 import { useState, useEffect, useCallback, useRef, createElement } from 'react';
 import { notifications } from '@mantine/notifications';
 import { IconAlertTriangle } from '@tabler/icons-react';
 import { isLocationExists } from '@/shared/lib/locationUtils';
-import type { CityLocation } from './cities';
+import type { CityLocation } from '../cities';
+import { FavoritesContext, type FavoriteLocation } from './FavoritesContext';
 
 const FAVORITES_STORAGE_KEY = 'meteomix_favorites';
 const MAX_FAVORITES = 10;
-
-export type FavoriteLocation = CityLocation & {
-  /** Уникальный идентификатор избранной локации */
-  id: string;
-  /** Время создания записи в избранном (timestamp в миллисекундах) */
-  createdAt: number;
-};
 
 // Функция для загрузки избранного из localStorage
 function loadFavoritesFromStorage(): FavoriteLocation[] {
   try {
     const stored = localStorage.getItem(FAVORITES_STORAGE_KEY);
     if (stored) {
-      const parsed = JSON.parse(stored) as FavoriteLocation[];
-      return parsed;
+      return JSON.parse(stored) as FavoriteLocation[];
     }
   } catch (error) {
     notifications.show({
@@ -33,13 +27,12 @@ function loadFavoritesFromStorage(): FavoriteLocation[] {
   return [];
 }
 
-export function useFavorites() {
-  // Используем lazy initialization, чтобы сразу загрузить данные из localStorage
+export function FavoritesProvider({ children }: { children: React.ReactNode }) {
   const [favorites, setFavorites] = useState<FavoriteLocation[]>(loadFavoritesFromStorage);
   const [error, setError] = useState<string | null>(null);
   const isInitializedRef = useRef(false);
 
-  // Сохраняем в localStorage при изменении (только после инициализации)
+  // Сохраняем в localStorage при изменении
   useEffect(() => {
     if (isInitializedRef.current) {
       try {
@@ -59,15 +52,12 @@ export function useFavorites() {
 
   const addFavorite = useCallback(
     (location: CityLocation): boolean => {
-      // Проверяем, не добавлена ли уже эта локация
       const exists = isLocationExists(favorites, location);
 
-      // Если локация уже в избранном, ничего не делаем
       if (exists) {
         return false;
       }
 
-      // Проверяем лимит
       if (favorites.length >= MAX_FAVORITES) {
         setError(`Максимальное количество избранных локаций: ${MAX_FAVORITES}`);
         return false;
@@ -95,12 +85,18 @@ export function useFavorites() {
     setError(null);
   }, []);
 
-  return {
-    favorites,
-    addFavorite,
-    removeFavorite,
-    error,
-    clearError,
-    maxFavorites: MAX_FAVORITES,
-  };
+  return (
+    <FavoritesContext.Provider
+      value={{
+        favorites,
+        addFavorite,
+        removeFavorite,
+        error,
+        clearError,
+        maxFavorites: MAX_FAVORITES,
+      }}
+    >
+      {children}
+    </FavoritesContext.Provider>
+  );
 }

@@ -8,9 +8,11 @@ import { AppHeader } from './components/AppHeader';
 import { CitySelect } from './components/CitySelect';
 import { ForecastTable } from './components/ForecastTable';
 import { GeocoderRequestsCounter } from './components/GeocoderRequestsCounter';
-import { useAllForecasts } from '../model/useAllForecasts';
+import { FavoritesList } from './components/FavoritesList';
+import { FavoritesProvider } from '../model/favorites';
 import { useCityStateWithGeolocation } from '../model/useCityStateWithGeolocation';
 import type { CityResult } from '../model/types';
+import { useAllForecasts } from '../model';
 
 export function HomePage() {
   const {
@@ -46,35 +48,42 @@ export function HomePage() {
       <Space h="xl" />
 
       {/* Поиск города с геолокацией */}
-      <CitySelect
-        selectedCity={city.label}
-        currentCity={city}
-        onSelect={handleCitySelect}
-        onGetCurrentLocation={getCurrentLocation}
-        geolocationLoading={geolocationLoading}
-        isGeolocationSupported={isGeolocationSupported}
-        handleFavoritesError={setFavoritesError}
-      />
+      <FavoritesProvider>
+        <CitySelect
+          selectedCity={city.label}
+          currentCity={city}
+          onSelect={handleCitySelect}
+          onGetCurrentLocation={getCurrentLocation}
+          geolocationLoading={geolocationLoading}
+          isGeolocationSupported={isGeolocationSupported}
+          handleFavoritesError={setFavoritesError}
+        />
 
-      {/* Ошибка геолокации */}
-      {geolocationError && (
-        <>
-          <Space h="sm" />
-          <Alert icon={<IconAlertTriangle size={16} />} color="red" variant="light">
-            {geolocationError}
-          </Alert>
-        </>
-      )}
+        {/* Ошибка геолокации */}
+        {geolocationError && (
+          <>
+            <Space h="sm" />
+            <Alert icon={<IconAlertTriangle size={16} />} color="red" variant="light">
+              {geolocationError}
+            </Alert>
+          </>
+        )}
 
-      {/* Ошибка избранного */}
-      {favoritesError && (
-        <>
-          <Space h="sm" />
-          <Alert icon={<IconAlertTriangle size={16} />} color="orange" variant="light">
-            {favoritesError}
-          </Alert>
-        </>
-      )}
+        {/* Ошибка избранного */}
+        {favoritesError && (
+          <>
+            <Space h="sm" />
+            <Alert icon={<IconAlertTriangle size={16} />} color="orange" variant="light">
+              {favoritesError}
+            </Alert>
+          </>
+        )}
+
+        <Space h="xl" />
+
+        {/* Список избранных локаций */}
+        <FavoritesList />
+      </FavoritesProvider>
 
       <Space h="xl" />
 

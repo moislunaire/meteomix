@@ -28,17 +28,30 @@ function isSimilar(a: string, b: string): boolean {
   const aWords = getKeyWords(a);
   const bWords = getKeyWords(b);
 
-  // Если есть пересечение ключевых слов, считаем названия похожими
-  return aWords.some((word) => bWords.includes(word));
+  // Исключаем короткие слова и стоп-слова
+  const STOP_WORDS = ['область', 'округ', 'автономный', 'муниципальный', 'край', 'республика'];
+  const aFiltered = aWords.filter((w) => w.length > 3 && !STOP_WORDS.includes(w));
+  const bFiltered = bWords.filter((w) => w.length > 3 && !STOP_WORDS.includes(w));
+
+  // Если после фильтрации ничего не осталось — сравниваем по координатам
+  if (aFiltered.length === 0 || bFiltered.length === 0) {
+    return false;
+  }
+
+  // Минимум 50% совпадений (но не менее 1 слова)
+  const matches = aFiltered.filter((word) => bFiltered.includes(word));
+  const minMatches = Math.min(aFiltered.length, bFiltered.length);
+
+  return matches.length >= Math.max(1, Math.floor(minMatches * 0.5));
 }
 
 /**
- * Функция для округления координат (до 3 знаков после запятой ≈ 100 метров точности)
+ * Функция для округления координат (до 1 знака после запятой ≈ 11 км точности)
  */
 function roundCoordinates(lat: number, lon: number): { lat: number; lon: number } {
   return {
-    lat: Math.round(lat * 1000) / 1000,
-    lon: Math.round(lon * 1000) / 1000,
+    lat: Math.round(lat * 10) / 10,
+    lon: Math.round(lon * 10) / 10,
   };
 }
 
