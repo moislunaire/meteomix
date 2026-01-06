@@ -1,0 +1,7 @@
+.container {
+  display: flex;
+  gap: var(--mantine-spacing-sm);
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding-bottom: 8px;
+}

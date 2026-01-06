@@ -1,0 +1,31 @@
+.card {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.remove-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 1;
+}
+
+.content {
+  padding-right: 24px; /* Место под кнопку удаления */
+}
+
+.temp-row {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.temp {
+  font-weight: 700;
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.condition {
+  line-height: 1;
+}
