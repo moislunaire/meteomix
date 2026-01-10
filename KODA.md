@@ -163,7 +163,6 @@ VISUALCROSSING_API_KEY=
 |------|----------|
 | `app.tsx` | Корневой компонент |
 | `providers/store/` | Redux Store с RTK Query |
-| `providers/location/` | Контекст выбранной локации |
 
 ### `src/pages/Home/`
 
@@ -184,6 +183,17 @@ VISUALCROSSING_API_KEY=
 | `api/forecastApi.ts` | RTK Query endpoints |
 | `model/types.*` | TypeScript типы API-ответов |
 | `model/normalize/*` | Нормализация данных от источников |
+
+### `src/entities/location/`
+
+Модуль локации пользователя:
+
+| Файл/директория | Описание |
+|-----------------|----------|
+| `index.ts` | Public API |
+| `LocationContext.tsx` | React Context для локации |
+| `LocationProvider.tsx` | Провайдер с localStorage |
+| `model/cities.ts` | Типы и константы (DEFAULT_CITY) |
 
 ### `src/shared/config/`
 
@@ -237,7 +247,7 @@ VISUALCROSSING_API_KEY=
 | `src/pages/Home/ui/HomePage.tsx` | Главная страница |
 | `src/entities/forecast/api/forecastApi.ts` | API-запросы к погодным сервисам |
 | `src/pages/Home/ui/components/ForecastTable.tsx` | Таблица сравнения прогнозов |
-| `src/app/providers/location/LocationProvider.tsx` | Управление выбранной локацией |
+| `src/entities/location/LocationProvider.tsx` | Управление выбранной локацией |
 | `src/pages/Home/model/useAllForecasts.ts` | Хук агрегации данных от всех источников |
 
 ---

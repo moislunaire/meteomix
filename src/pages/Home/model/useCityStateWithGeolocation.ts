@@ -1,7 +1,7 @@
-import { useState, useEffect, useCallback } from 'react';
-import { DEFAULT_CITY, type CityLocation } from './cities';
-import { useGeolocation } from './useGeolocation';
+import { DEFAULT_CITY, type CityLocation } from '@/entities/location';
+import { useCallback, useEffect, useState } from 'react';
 import type { CityResult } from './types';
+import { useGeolocation } from './useGeolocation';
 
 type UseCityStateWithGeolocationReturn = {
   // Состояние города (совместимо с useCityState)

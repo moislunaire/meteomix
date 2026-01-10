@@ -1,41 +1,51 @@
-import { Container, Group, Space, Title, Alert } from '@mantine/core';
+import { Alert, Container, Group, Space, Title } from '@mantine/core';
 import { IconAlertTriangle } from '@tabler/icons-react';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
+import { useLocation } from '@/entities/location';
 import { FORECAST_DAYS } from '@/shared/config';
+import type { CityResult } from '../model/types';
+import { useGeolocation } from '../model/useGeolocation';
 
+import { useAllForecasts } from '../model';
+import { FavoritesProvider } from '../model/favorites';
 import { AppHeader } from './components/AppHeader';
 import { CitySelect } from './components/CitySelect';
+import { FavoritesList } from './components/FavoritesList';
 import { ForecastTable } from './components/ForecastTable';
 import { GeocoderRequestsCounter } from './components/GeocoderRequestsCounter';
-import { FavoritesList } from './components/FavoritesList';
-import { FavoritesProvider } from '../model/favorites';
-import { useCityStateWithGeolocation } from '../model/useCityStateWithGeolocation';
-import type { CityResult } from '../model/types';
-import { useAllForecasts } from '../model';
 
 export function HomePage() {
-  const {
-    city,
-    setCity,
-    geolocationLoading,
-    geolocationError,
-    getCurrentLocation,
-    isGeolocationSupported,
-  } = useCityStateWithGeolocation();
+  const { location, setLocation } = useLocation();
 
   const [favoritesError, setFavoritesError] = useState<string | null>(null);
 
-  const { data, errors, isLoading, hasAnyData } = useAllForecasts(city.lat, city.lon);
+  const handleLocationSelect = useCallback(
+    (result: CityResult) => {
+      setLocation({
+        label: result.fullName,
+        lat: result.lat,
+        lon: result.lon,
+      });
+    },
+    [setLocation]
+  );
 
-  const handleCitySelect = (selectedCity: CityResult) => {
-    setFavoritesError(null);
-    setCity({
-      label: selectedCity.fullName,
-      lat: selectedCity.lat,
-      lon: selectedCity.lon,
-    });
-  };
+  const {
+    loading: geolocationLoading,
+    error: geolocationError,
+    getCurrentLocation,
+    isSupported: isGeolocationSupported,
+  } = useGeolocation(handleLocationSelect);
+
+  // Автоматически запускаем геолокацию при загрузке страницы
+  useEffect(() => {
+    if (isGeolocationSupported) {
+      getCurrentLocation();
+    }
+  }, [isGeolocationSupported, getCurrentLocation]);
+
+  const { data, errors, isLoading, hasAnyData } = useAllForecasts(location.lat, location.lon);
 
   return (
     <Container size="md" py="xl" style={{ position: 'relative' }}>
@@ -50,9 +60,7 @@ export function HomePage() {
       {/* Поиск города с геолокацией */}
       <FavoritesProvider>
         <CitySelect
-          selectedCity={city.label}
-          currentCity={city}
-          onSelect={handleCitySelect}
+          onSelect={handleLocationSelect}
           onGetCurrentLocation={getCurrentLocation}
           geolocationLoading={geolocationLoading}
           isGeolocationSupported={isGeolocationSupported}
@@ -88,7 +96,7 @@ export function HomePage() {
       <Space h="xl" />
 
       <Title order={2} ta="center">
-        {city.label} — прогноз на {FORECAST_DAYS} дней
+        {location.label} — прогноз на {FORECAST_DAYS} дней
       </Title>
 
       <Space h="lg" />

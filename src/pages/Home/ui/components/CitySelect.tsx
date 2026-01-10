@@ -1,19 +1,15 @@
-import { Autocomplete, Loader, Group, Button } from '@mantine/core';
-import { notifications } from '@mantine/notifications';
-import { useCityAutocomplete } from '../../model/useCityAutocomplete';
-import type { CityResult } from '../../model/types';
-import type { CityLocation } from '../../model/cities';
-import { useFavorites } from '../../model/favorites';
+import { useLocation } from '@/entities/location';
 import { isLocationExists } from '@/shared/lib/locationUtils';
-import { IconSearch, IconMapPin, IconStar, IconCheck } from '@tabler/icons-react';
+import { Autocomplete, Button, Group, Loader } from '@mantine/core';
+import { notifications } from '@mantine/notifications';
+import { IconCheck, IconMapPin, IconSearch, IconStar } from '@tabler/icons-react';
 import { useEffect } from 'react';
+import { useFavorites } from '../../model/favorites';
+import type { CityResult } from '../../model/types';
+import { useCityAutocomplete } from '../../model/useCityAutocomplete';
 
 type Props = {
   onSelect: (city: CityResult) => void;
-  /** Название текущего выбранного города */
-  selectedCity?: string;
-  /** Текущая локация города */
-  currentCity?: CityLocation;
   /** Функция для получения текущего местоположения */
   onGetCurrentLocation?: () => Promise<void>;
   /** Состояние загрузки геолокации */
@@ -26,16 +22,15 @@ type Props = {
 
 export function CitySelect({
   onSelect,
-  selectedCity,
-  currentCity,
   onGetCurrentLocation,
   geolocationLoading = false,
   isGeolocationSupported = false,
   handleFavoritesError,
 }: Props) {
+  const { location } = useLocation();
   const { input, setInput, suggestions, loading, selectCity } = useCityAutocomplete(
     onSelect,
-    selectedCity
+    location.label
   );
   const { favorites, addFavorite, error: favoritesError, clearError } = useFavorites();
 
@@ -47,22 +42,20 @@ export function CitySelect({
   }, [favoritesError, handleFavoritesError]);
 
   const handleAddToFavorites = () => {
-    if (!currentCity) return;
-
     clearError();
-    const success = addFavorite(currentCity);
+    const success = addFavorite(location);
 
     if (success) {
       notifications.show({
         title: 'Успешно добавлено',
-        message: `${currentCity.label} добавлен в избранное`,
+        message: `${location.label} добавлен в избранное`,
         color: 'green',
         icon: <IconCheck size={18} />,
       });
     }
   };
 
-  const isAlreadyInFavorites = currentCity ? isLocationExists(favorites, currentCity) : false;
+  const isAlreadyInFavorites = isLocationExists(favorites, location);
 
   return (
     <Group>
@@ -91,17 +84,15 @@ export function CitySelect({
         style={{ flex: 1 }}
       />
 
-      {currentCity && (
-        <Button
-          variant="light"
-          leftSection={<IconStar size={18} stroke={1.5} />}
-          onClick={handleAddToFavorites}
-          disabled={isAlreadyInFavorites}
-          aria-label="Добавить в избранное"
-        >
-          В избранное
-        </Button>
-      )}
+      <Button
+        variant="light"
+        leftSection={<IconStar size={18} stroke={1.5} />}
+        onClick={handleAddToFavorites}
+        disabled={isAlreadyInFavorites}
+        aria-label="Добавить в избранное"
+      >
+        В избранное
+      </Button>
     </Group>
   );
 }
