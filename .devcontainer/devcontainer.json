@@ -3,13 +3,17 @@
   "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
   "features": {
     "ghcr.io/devcontainers/features/node:1": {
-      "version": "18"
+      "version": "22"
     }
   },
   "customizations": {
     "vscode": {
       "extensions": [
-        "koda.koda"
+        "koda.koda",
+        "streetsidesoftware.code-spell-checker",
+        "dbaeumer.vscode-eslint",
+        "stylelint.vscode-stylelint",
+        "streetsidesoftware.code-spell-checker-russian"
       ]
     }
   }

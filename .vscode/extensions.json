@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "stylelint.vscode-stylelint",
+    "streetsidesoftware.code-spell-checker",
+    "feature-sliced.steiger-vscode",
+    "streetsidesoftware.code-spell-checker-russian"
+  ]
+}

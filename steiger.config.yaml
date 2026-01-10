@@ -1,0 +1,5 @@
+# Steiger FSD Linter Configuration
+# https://github.com/feature-sliced/steiger
+
+rules:
+  all: true
