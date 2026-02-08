@@ -1,9 +1,8 @@
-import React from 'react';
-import { useState, useEffect, useCallback, useRef, createElement } from 'react';
+import type { CityLocation } from '@/entities/location';
+import { isLocationExists } from '@/shared/lib/locationUtils';
 import { notifications } from '@mantine/notifications';
 import { IconAlertTriangle } from '@tabler/icons-react';
-import { isLocationExists } from '@/shared/lib/locationUtils';
-import type { CityLocation } from '../cities';
+import React, { createElement, useCallback, useEffect, useRef, useState } from 'react';
 import { FavoritesContext, type FavoriteLocation } from './FavoritesContext';
 
 const FAVORITES_STORAGE_KEY = 'meteomix_favorites';

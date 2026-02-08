@@ -1,5 +1,5 @@
+import type { CityLocation } from '@/entities/location';
 import { createContext } from 'react';
-import type { CityLocation } from '../cities';
 
 export type FavoriteLocation = CityLocation & {
   id: string;
