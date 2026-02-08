@@ -31,3 +31,4 @@ quokka.ts
 # AI Development Tools
 .qodo
 .gigaide
+.env
